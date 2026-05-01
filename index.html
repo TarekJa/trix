@@ -1,370 +1,379 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#f59e0b">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    
-    <title>تركس</title>
-    
-    <!-- Favicons -->
-    <link rel="icon" href="favicon" type="image/x-icon">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    
-    <!-- Android Chrome Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
-    
-    <!-- Windows Tile -->
-    <meta name="msapplication-TileImage" content="mstile-150x150.png">
-    <meta name="msapplication-TileColor" content="#f59e0b">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تركس فخم</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 
-    <link rel="manifest" href="site.webmanifest">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: linear-gradient(to bottom, #0f172a, #1e2937);
-        }
-        .kingdom-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .kingdom-card:hover { transform: translateY(-5px); }
-        .kingdom-card.completed {
-            border-color: #10b981;
-            background-color: #052e16;
-        }
-        .score-positive { color: #22c55e; text-shadow: 0 0 15px rgba(34,197,94,0.5); }
-        .score-negative { color: #ef4444; text-shadow: 0 0 15px rgba(239,68,68,0.5); }
-    </style>
+<style>
+    body {
+        font-family: 'Cairo', sans-serif;
+        background: linear-gradient(135deg, #0f172a, #1e2937, #020617);
+    }
+    .card {
+        transition: all 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+    .btn {
+        background: linear-gradient(to right, #f59e0b, #ea580c);
+        transition: all 0.3s ease;
+    }
+    .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 15px rgba(245, 158, 11, 0.4);
+    }
+    .input {
+        background: #1e2937;
+        border: 2px solid #334155;
+        transition: all 0.3s;
+    }
+    .input:focus {
+        border-color: #f59e0b;
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    }
+    .score-positive { color: #22c55e; text-shadow: 0 0 25px rgba(34, 197, 94, 0.8); }
+    .score-negative { color: #ef4444; text-shadow: 0 0 25px rgba(239, 68, 68, 0.8); }
+</style>
 </head>
-<body class="min-h-screen pb-24 text-white">
+<body class="text-white min-h-screen">
+<div class="max-w-2xl mx-auto p-6">
 
-    <div class="max-w-2xl mx-auto px-4">
-        <!-- Header -->
-        <div class="flex items-center justify-between py-6 border-b border-slate-700">
-            <div class="flex items-center gap-3">
-                <div class="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center text-4xl shadow-xl">♠️</div>
+    <!-- HEADER -->
+    <div class="text-center mb-8">
+        <h1 class="text-5xl font-black tracking-wider mb-2">
+            🃏♠️♥️ <span class="text-amber-400">تركس</span>♦️♣️ 🃏
+        </h1>
+        <p class="text-amber-300 text-xl">تسجيل و توثيق 😉 📝</p>
+    </div>
+
+    <!-- SETUP -->
+    <div id="setup">
+        <div class="grid grid-cols-2 gap-4">
+            <input id="p0" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 1">
+            <input id="p2" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 2 (شريك)">
+            <input id="p1" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 3">
+            <input id="p3" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 4 (شريك)">
+        </div>
+        <button onclick="startGame()" class="btn w-full mt-8 py-5 text-xl font-bold rounded-3xl shadow-lg">
+            🚀 ابدأ اللعبة
+        </button>
+    </div>
+
+    <!-- GAME -->
+    <div id="game" class="hidden">
+        <div id="kingdoms" class="grid grid-cols-2 gap-4"></div>
+
+        <div id="scores" class="mt-8 bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl"></div>
+
+        <!-- Panel -->
+        <div id="panel" class="hidden mt-8 bg-slate-900/90 backdrop-blur-2xl p-8 rounded-3xl border border-amber-500/30">
+            <h3 id="panelTitle" class="text-2xl font-bold text-amber-300 mb-6 text-center"></h3>
+            
+            <div class="space-y-6">
                 <div>
-                    <h1 class="text-4xl font-bold tracking-tighter">تركس</h1>
-                    <p class="text-slate-400 text-sm">حاسبة نتائج الشراكة</p>
+                    <label class="block text-amber-400 mb-2 text-lg">♠️♥️التركس♦️♣️ </label>
+                    <select id="trix" class="select w-full p-4 bg-slate-800 rounded-2xl text-xl"></select>
                 </div>
-            </div>
-            <button onclick="resetAll()" class="flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 rounded-2xl text-sm font-medium transition">
-                <i class="fas fa-redo"></i>
-                <span>جلسة جديدة</span>
-            </button>
-        </div>
 
-        <!-- Setup -->
-        <div id="setupScreen" class="mt-10">
-            <div id="step3">
-                <h2 class="text-xl font-semibold mb-6">أدخل أسماء اللاعبين (شراكة)</h2>
-                <div id="playersContainer" class="space-y-5"></div>
-                
-                <button onclick="startGame()" 
-                        class="mt-12 w-full bg-gradient-to-r from-amber-500 to-orange-500 py-6 rounded-3xl font-bold text-xl shadow-lg active:scale-95 transition">
-                    ابدأ الجلسة
-                </button>
-            </div>
-        </div>
-
-        <!-- Game Screen -->
-        <div id="gameScreen" class="hidden">
-            <div class="flex justify-between items-center mb-6 text-sm text-slate-400">
-                <div id="sessionDate"></div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3 mb-8" id="kingdomGrid"></div>
-
-            <div id="teamsDisplay" class="space-y-4 mb-10"></div>
-
-            <div id="inputPanel" class="bg-slate-900 border border-slate-700 rounded-3xl p-6 hidden">
-                <h3 class="text-center text-2xl font-bold mb-6" id="panelTitle"></h3>
-                
-                <div class="space-y-6">
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-slate-400 mb-2">التركس</label>
-                        <select id="trixSelect" class="w-full bg-slate-800 border border-slate-600 rounded-2xl px-5 py-4 text-2xl text-center">
-                            <option value="0">0</option>
-                            <option value="150">150</option>
-                            <option value="200">200</option>
-                            <option value="250">250</option>
-                            <option value="300">300</option>
-                            <option value="350">350</option>
+                        <label class="block text-pink-400 mb-2 text-lg">👸 البنات</label>
+                        <select id="girls" class="select w-full p-4 bg-slate-800 rounded-2xl text-xl"></select>
+                    </div>
+                    <div>
+                        <label class="block text-rose-400 mb-2 text-lg">👑 الختيار</label>
+                        <select id="king" class="select w-full p-4 bg-slate-800 rounded-2xl text-xl">
+                            <option value="0">لم يأكل</option>
+                            <option value="1">أكل 👑</option>
                         </select>
                     </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-slate-400 mb-2">عدد البنات</label>
-                            <select id="girlsSelect" class="w-full bg-slate-800 border border-slate-600 rounded-2xl px-5 py-4"></select>
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-2">الختيار</label>
-                            <select id="kingSelect" class="w-full bg-slate-800 border border-slate-600 rounded-2xl px-5 py-4">
-                                <option value="0">لم يأكل</option>
-                                <option value="1">أكل</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-slate-400 mb-2">الديناري</label>
-                            <select id="dinarSelect" class="w-full bg-slate-800 border border-slate-600 rounded-2xl px-5 py-4"></select>
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-2">اللطوش</label>
-                            <select id="lutooshSelect" class="w-full bg-slate-800 border border-slate-600 rounded-2xl px-5 py-4"></select>
-                        </div>
-                    </div>
                 </div>
 
-                <button onclick="saveKingdom()" 
-                        class="mt-10 w-full bg-gradient-to-r from-emerald-500 to-teal-500 py-6 rounded-3xl font-bold text-xl active:scale-95">
-                    حفظ المملكة
-                </button>
-            </div>
-        </div>
-
-        <!-- Final Screen -->
-        <div id="finalScreen" class="hidden">
-            <div class="text-center py-12">
-                <i class="fas fa-crown text-7xl text-amber-400 mb-4"></i>
-                <h2 class="text-3xl font-bold text-amber-400">الفائز</h2>
-                <div id="winnerDisplay" class="mt-6 text-5xl font-bold"></div>
-                <div id="winnerScore" class="text-6xl font-black mt-3"></div>
-                <div id="sessionInfo" class="text-slate-400 mt-8 text-sm"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-yellow-400 mb-2 text-lg">♦️ الديناري</label>
+                        <select id="dinar" class="select w-full p-4 bg-slate-800 rounded-2xl text-xl"></select>
+                    </div>
+                    <div>
+                        <label class="block text-orange-400 mb-2 text-lg">🃏 اللطوش</label>
+                        <select id="lutoosh" class="select w-full p-4 bg-slate-800 rounded-2xl text-xl"></select>
+                    </div>
+                </div>
             </div>
 
-            <div id="finalResults" class="space-y-4"></div>
-
-            <div class="flex gap-4 mt-16">
-                <button onclick="shareAsImage()" 
-                        class="flex-1 bg-gradient-to-r from-violet-500 to-purple-600 py-6 rounded-3xl font-bold text-lg flex items-center justify-center gap-3">
-                    <i class="fas fa-share-alt"></i>
-                    مشاركة النتيجة
-                </button>
-                <button onclick="resetAll()" 
-                        class="flex-1 bg-slate-700 hover:bg-slate-600 py-6 rounded-3xl font-bold text-lg">
-                    جلسة جديدة
-                </button>
-            </div>
+            <button onclick="save()" class="btn w-full mt-10 py-5 text-xl font-bold rounded-3xl">
+                💾 حفظ المملكة
+            </button>
         </div>
     </div>
 
-    <script>
-        let teams = [];
-        let completedKingdoms = new Set();
-        let sessionDate = new Date();
-        let players = [];
+    <!-- FINAL SCREEN -->
+    <div id="final" class="hidden text-center">
+        <button onclick="location.reload()" class="absolute top-6 left-6 bg-slate-700 hover:bg-slate-600 px-5 py-3 rounded-2xl text-sm">
+            🔄 لعبة جديدة
+        </button>
 
-        function renderPlayerInputs() {
-            const container = document.getElementById('playersContainer');
-            container.innerHTML = `
-                <div class="bg-emerald-900/30 border border-emerald-500 rounded-3xl p-6">
-                    <p class="text-emerald-400 font-bold mb-3">الفريق الأول</p>
-                    <div class="flex gap-3">
-                        <input id="p0" value="أحمد" class="flex-1 bg-slate-800 rounded-2xl px-5 py-4 text-lg">
-                        <input id="p2" value="علي" class="flex-1 bg-slate-800 rounded-2xl px-5 py-4 text-lg">
+        <div id="winner" class="mt-12 mb-10"></div>
+        <div id="finalScores" class="mb-10"></div>
+
+        <button onclick="exportImage()" class="btn w-full py-6 text-2xl font-bold rounded-3xl shadow-2xl flex items-center justify-center gap-3">
+            📸 توثيق النتيجة بفخامة
+        </button>
+    </div>
+</div>
+
+<script>
+let players = [], teams = [], done = new Set(), log = [];
+let current = null;
+let gameStartTime = null;
+let kingdomStartTime = null;
+
+function startGame() {
+    players = [
+        document.getElementById('p0').value || "لاعب 1",
+        document.getElementById('p1').value || "لاعب 2",
+        document.getElementById('p2').value || "لاعب 3",
+        document.getElementById('p3').value || "لاعب 4"
+    ];
+
+    teams = [
+        { name: players[0] + " & " + players[2], score: 0 },
+        { name: players[1] + " & " + players[3], score: 0 }
+    ];
+
+    gameStartTime = Date.now();
+    document.getElementById('setup').classList.add('hidden');
+    document.getElementById('game').classList.remove('hidden');
+    
+    fillSelects();
+    renderKingdoms();
+    renderScores();
+}
+
+function fillSelects() {
+    const trix = document.getElementById('trix');
+    trix.innerHTML = [0,150,200,250,300,350].map(v => `<option value="${v}">${v}</option>`).join('');
+
+    const girls = document.getElementById('girls');
+    girls.innerHTML = [0,1,2,3,4].map(v => `<option value="${v}">${v}</option>`).join('');
+
+    const dinar = document.getElementById('dinar');
+    dinar.innerHTML = [...Array(14)].map((_,i) => `<option value="${i}">${i}</option>`).join('');
+
+    const lutoosh = document.getElementById('lutoosh');
+    lutoosh.innerHTML = [...Array(14)].map((_,i) => `<option value="${i}">${i}</option>`).join('');
+}
+
+function renderKingdoms() {
+    const container = document.getElementById('kingdoms');
+    container.innerHTML = '';
+    
+    for(let i = 0; i < 4; i++) {
+        const div = document.createElement('div');
+        div.className = `card bg-slate-800/90 p-6 rounded-3xl text-center cursor-pointer border border-slate-700 hover:border-amber-400`;
+        div.innerHTML = `
+            <div class="text-4xl mb-3">🏰</div>
+            <div class="font-bold text-xl">مملكة ${i+1}</div>
+            <div class="text-amber-300 mt-1">${players[i]}</div>
+            ${done.has(i) ? '<div class="text-green-400 mt-2">✅ مكتملة</div>' : ''}
+        `;
+        if(!done.has(i)) div.onclick = () => openKingdom(i);
+        container.appendChild(div);
+    }
+}
+
+function renderScores() {
+    const scoresDiv = document.getElementById('scores');
+    const s0 = teams[0].score;
+    const s1 = teams[1].score;
+    
+    scoresDiv.innerHTML = `
+        <div class="grid grid-cols-2 gap-8 text-center">
+            <div>
+                <div class="text-emerald-400 text-sm font-bold">الفريق الأخضر</div>
+                <div class="text-5xl font-black ${s0 >= 0 ? 'score-positive' : 'score-negative'}">${s0}</div>
+                <div class="text-slate-400 text-sm mt-1">${teams[0].name}</div>
+            </div>
+            <div>
+                <div class="text-sky-400 text-sm font-bold">الفريق الأزرق</div>
+                <div class="text-5xl font-black ${s1 >= 0 ? 'score-positive' : 'score-negative'}">${s1}</div>
+                <div class="text-slate-400 text-sm mt-1">${teams[1].name}</div>
+            </div>
+        </div>
+    `;
+}
+
+function openKingdom(i) {
+    current = i;
+    kingdomStartTime = Date.now();
+    
+    document.getElementById('panel').classList.remove('hidden');
+    document.getElementById('panelTitle').innerHTML = `🏰 مملكة ${i+1} - ${players[i]}`;
+    
+    // Reset values
+    document.getElementById('trix').value = 0;
+    document.getElementById('girls').value = 0;
+    document.getElementById('king').value = 0;
+    document.getElementById('dinar').value = 0;
+    document.getElementById('lutoosh').value = 0;
+}
+
+function save() {
+    const t = +document.getElementById('trix').value;
+    const g = +document.getElementById('girls').value;
+    const k = +document.getElementById('king').value;
+    const d = +document.getElementById('dinar').value;
+    const l = +document.getElementById('lutoosh').value;
+
+    const A = t - g*25 - k*75 - d*10 - l*15;
+    const B = (500 - t) - (4 - g)*25 - (1 - k)*75 - (13 - d)*10 - (13 - l)*15;
+
+    const teamA = current % 2 === 0 ? 0 : 1;
+    teams[teamA].score += A;
+    teams[1 - teamA].score += B;
+
+    const duration = Math.floor((Date.now() - kingdomStartTime) / 1000);
+
+    log.push({
+        kingdom: current + 1,
+        player: players[current],
+        time: duration,
+        trix: t,
+        girls: g,
+        king: k,
+        dinar: d,
+        lutoosh: l
+    });
+
+    done.add(current);
+    document.getElementById('panel').classList.add('hidden');
+    
+    renderKingdoms();
+    renderScores();
+
+    if(done.size === 4) finishGame();
+}
+
+function finishGame() {
+    document.getElementById('game').classList.add('hidden');
+    document.getElementById('final').classList.remove('hidden');
+
+    const s0 = teams[0].score;
+    const s1 = teams[1].score;
+    const winnerTeam = s0 > s1 ? teams[0] : teams[1];
+    const isDraw = s0 === s1;
+
+    let winnerHTML = '';
+
+    if(isDraw) {
+        winnerHTML = `
+            <div class="text-6xl mb-4">🤝</div>
+            <div class="text-4xl font-black text-amber-300">تعادل!</div>
+            <p class="text-2xl mt-4 text-slate-400">دق وأخوه للحسم 😄</p>
+        `;
+    } else {
+        winnerHTML = `
+            <div class="inline-flex items-center gap-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 px-10 py-6 rounded-3xl text-5xl font-black shadow-2xl">
+                👑 ${winnerTeam.name}
+            </div>
+            <div class="flex justify-center gap-6 mt-8 text-6xl">
+                👏😂🎉
+            </div>
+            <p class="text-3xl mt-6 text-amber-300 font-bold">الفريق الفائز</p>
+        `;
+    }
+
+    document.getElementById('winner').innerHTML = winnerHTML;
+
+    // Final Scores
+    document.getElementById('finalScores').innerHTML = `
+        <div class="grid grid-cols-2 gap-10 text-center max-w-md mx-auto">
+            <div class="${s0 >= 0 ? 'score-positive' : 'score-negative'}">
+                <div class="text-6xl font-black">${s0}</div>
+                <div class="text-sm mt-2">${teams[0].name}</div>
+            </div>
+            <div class="${s1 >= 0 ? 'score-positive' : 'score-negative'}">
+                <div class="text-6xl font-black">${s1}</div>
+                <div class="text-sm mt-2">${teams[1].name}</div>
+            </div>
+        </div>
+    `;
+}
+
+async function exportImage() {
+    const totalTime = Math.floor((Date.now() - gameStartTime) / 1000);
+    const minutes = Math.floor(totalTime / 60);
+    const seconds = totalTime % 60;
+    const totalTimeStr = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+    const s0 = teams[0].score;
+    const s1 = teams[1].score;
+    const isDraw = s0 === s1;
+    const winnerName = isDraw ? "تعادل" : (s0 > s1 ? teams[0].name : teams[1].name);
+
+    const today = new Date().toLocaleDateString('ar-SA');
+
+    let box = document.createElement("div");
+    box.style.cssText = `
+        padding: 30px; 
+        background: linear-gradient(135deg, #0f172a, #1e2937);
+        color: white; 
+        width: 420px; 
+        font-family: Cairo, sans-serif;
+        border-radius: 20px;
+        box-shadow: 0 0 40px rgba(245, 158, 11, 0.3);
+    `;
+
+    box.innerHTML = `
+        <div style="text-align:center; margin-bottom:20px">
+            <div style="font-size:42px; margin-bottom:8px">♠️♥️🃏♦️♣️</div>
+            <h2 style="font-size:28px; font-weight:900; color:#fcd34d">${isDraw ? '🤝 تعادل' : '👑 الفريق الفائز'}</h2>
+            <p style="font-size:22px; color:#f59e0b; margin-top:8px">${winnerName}</p>
+            <p style="color:#94a3b8; margin-top:12px">📅 ${today}</p>
+        </div>
+
+        <div style="background:#1e2937; padding:15px; border-radius:16px; margin:20px 0;">
+            ${log.map(x => `
+                <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #334155;">
+                    <div>
+                        <strong>🏰 مملكة ${x.kingdom}</strong><br>
+                        <span style="color:#cbd5e1">${x.player}</span>
+                    </div>
+                    <div style="text-align:right; color:#94a3b8">
+                        ⏱ ${x.time} ث<br>
+                        ♥️♠️♦️♣️ ${x.trix} | 👸 ${x.girls} | 👑 ${x.king}<br>
+                        ♦️ ${x.dinar} | 🃏 ${x.lutoosh}
                     </div>
                 </div>
-                <div class="bg-sky-900/30 border border-sky-500 rounded-3xl p-6 mt-4">
-                    <p class="text-sky-400 font-bold mb-3">الفريق الثاني</p>
-                    <div class="flex gap-3">
-                        <input id="p1" value="محمد" class="flex-1 bg-slate-800 rounded-2xl px-5 py-4 text-lg">
-                        <input id="p3" value="خالد" class="flex-1 bg-slate-800 rounded-2xl px-5 py-4 text-lg">
-                    </div>
-                </div>
-            `;
-        }
+            `).join('')}
+        </div>
 
-        function startGame() {
-            players = [
-                { name: document.getElementById('p0').value.trim() || "أحمد" },
-                { name: document.getElementById('p1').value.trim() || "محمد" },
-                { name: document.getElementById('p2').value.trim() || "علي" },
-                { name: document.getElementById('p3').value.trim() || "خالد" }
-            ];
+        <div style="text-align:center; margin-top:25px; font-size:22px">
+            <div style="color:#ef4444">🔴 ${teams[0].name}: <strong>${teams[0].score}</strong></div>
+            <div style="color:#22c55e; margin-top:8px">🟢 ${teams[1].name}: <strong>${teams[1].score}</strong></div>
+        </div>
 
-            teams = [
-                { name: `${players[0].name} & ${players[2].name}`, total: 0 },
-                { name: `${players[1].name} & ${players[3].name}`, total: 0 }
-            ];
+        <div style="text-center mt-8 text-slate-400 text-sm">
+            الوقت الكلي: ${totalTimeStr} دقيقة
+        </div>
+    `;
 
-            document.getElementById('setupScreen').classList.add('hidden');
-            document.getElementById('gameScreen').classList.remove('hidden');
+    document.body.appendChild(box);
 
-            document.getElementById('sessionDate').innerHTML = `
-                ${sessionDate.toLocaleDateString('ar-SY', { weekday: 'long', month: 'long', day: 'numeric' })} 
-                • ${sessionDate.toLocaleTimeString('ar-SY', { hour: '2-digit', minute: '2-digit' })}
-            `;
+    const canvas = await html2canvas(box, { scale: 3, backgroundColor: "#0f172a" });
+    const link = document.createElement("a");
+    link.download = `تركس_${winnerName}_${today}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
 
-            renderKingdomGrid();
-            renderTeamsDisplay();
-            populateSelects();
-        }
-
-        function renderKingdomGrid() {
-            const grid = document.getElementById('kingdomGrid');
-            grid.innerHTML = '';
-            for (let i = 0; i < 4; i++) {
-                const completed = completedKingdoms.has(i);
-                const card = document.createElement('div');
-                card.className = `kingdom-card bg-slate-800 border ${completed ? 'completed border-emerald-500' : 'border-slate-600'} rounded-3xl p-6 cursor-pointer`;
-                card.innerHTML = `
-                    <div class="font-bold text-xl mb-1">مملكة ${i+1}</div>
-                    <div class="text-slate-400">${players[i].name}</div>
-                `;
-                if (!completed) card.onclick = () => openKingdom(i);
-                grid.appendChild(card);
-            }
-        }
-
-        function renderTeamsDisplay() {
-            const cont = document.getElementById('teamsDisplay');
-            cont.innerHTML = `
-                <div class="bg-slate-900 border border-emerald-500 rounded-3xl p-6">
-                    <div class="flex justify-between items-center">
-                        <div class="font-bold text-xl">${teams[0].name}</div>
-                        <div id="team0" class="text-5xl font-black score-positive">0</div>
-                    </div>
-                </div>
-                <div class="bg-slate-900 border border-sky-500 rounded-3xl p-6">
-                    <div class="flex justify-between items-center">
-                        <div class="font-bold text-xl">${teams[1].name}</div>
-                        <div id="team1" class="text-5xl font-black score-positive">0</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function populateSelects() {
-            document.getElementById('girlsSelect').innerHTML = Array.from({length:5}, (_,i) => `<option value="${i}">${i} بنات</option>`).join('');
-            document.getElementById('dinarSelect').innerHTML = Array.from({length:14}, (_,i) => `<option value="${i}">${i} ديناري</option>`).join('');
-            document.getElementById('lutooshSelect').innerHTML = Array.from({length:14}, (_,i) => `<option value="${i}">${i} لطوش</option>`).join('');
-        }
-
-        let currentKingdomIndex;
-        function openKingdom(index) {
-            if (completedKingdoms.has(index)) return;
-            currentKingdomIndex = index;
-            document.getElementById('panelTitle').innerHTML = `مملكة ${index+1} — ${players[index].name}`;
-            document.getElementById('inputPanel').classList.remove('hidden');
-
-            document.getElementById('trixSelect').value = "0";
-            document.getElementById('girlsSelect').value = "0";
-            document.getElementById('kingSelect').value = "0";
-            document.getElementById('dinarSelect').value = "0";
-            document.getElementById('lutooshSelect').value = "0";
-        }
-
-        function saveKingdom() {
-            const idx = currentKingdomIndex;
-            const trix = parseInt(document.getElementById('trixSelect').value) || 0;
-            const girls = parseInt(document.getElementById('girlsSelect').value) || 0;
-            const king = parseInt(document.getElementById('kingSelect').value) || 0;
-            const dinar = parseInt(document.getElementById('dinarSelect').value) || 0;
-            const lutoosh = parseInt(document.getElementById('lutooshSelect').value) || 0;
-
-            let points = trix - girls*25 - king*75 - dinar*10 - lutoosh*15;
-
-            const isTeamA = (idx === 0 || idx === 2);
-            const teamA = isTeamA ? 0 : 1;
-            const teamB = 1 - teamA;
-
-            const trixB = 500 - trix;
-            const girlsB = 4 - girls;
-            const kingB = 1 - king;
-            const dinarB = 13 - dinar;
-            const lutooshB = 13 - lutoosh;
-
-            const pointsB = trixB - girlsB*25 - kingB*75 - dinarB*10 - lutooshB*15;
-
-            teams[teamA].total += points;
-            teams[teamB].total += pointsB;
-
-            completedKingdoms.add(idx);
-            renderKingdomGrid();
-            updateScores();
-
-            document.getElementById('inputPanel').classList.add('hidden');
-
-            if (completedKingdoms.size === 4) {
-                setTimeout(showFinalScreen, 800);
-            }
-        }
-
-        function updateScores() {
-            document.getElementById('team0').textContent = Math.round(teams[0].total);
-            document.getElementById('team1').textContent = Math.round(teams[1].total);
-            document.getElementById('team0').className = `text-5xl font-black ${teams[0].total >= 0 ? 'score-positive' : 'score-negative'}`;
-            document.getElementById('team1').className = `text-5xl font-black ${teams[1].total >= 0 ? 'score-positive' : 'score-negative'}`;
-        }
-
-        function showFinalScreen() {
-            document.getElementById('gameScreen').classList.add('hidden');
-            document.getElementById('finalScreen').classList.remove('hidden');
-
-            const winner = teams[0].total > teams[1].total ? teams[0] : teams[1];
-
-            document.getElementById('winnerDisplay').innerHTML = `${winner.name} 👑`;
-            document.getElementById('winnerScore').innerHTML = `
-                <span class="${winner.total >= 0 ? 'score-positive' : 'score-negative'}">
-                    ${winner.total >= 0 ? '+' : ''}${Math.round(winner.total)}
-                </span>
-            `;
-
-            document.getElementById('sessionInfo').innerHTML = `
-                ${sessionDate.toLocaleDateString('ar-SY', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} 
-                • ${sessionDate.toLocaleTimeString('ar-SY', { hour: '2-digit', minute: '2-digit' })}
-            `;
-
-            const container = document.getElementById('finalResults');
-            container.innerHTML = `
-                <div class="bg-slate-900 rounded-3xl p-6 border border-emerald-500">
-                    <div class="flex justify-between items-center">
-                        <div class="font-bold">${teams[0].name}</div>
-                        <div class="${teams[0].total >= 0 ? 'score-positive' : 'score-negative'} text-4xl">${Math.round(teams[0].total)}</div>
-                    </div>
-                </div>
-                <div class="bg-slate-900 rounded-3xl p-6 border border-sky-500">
-                    <div class="flex justify-between items-center">
-                        <div class="font-bold">${teams[1].name}</div>
-                        <div class="${teams[1].total >= 0 ? 'score-positive' : 'score-negative'} text-4xl">${Math.round(teams[1].total)}</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function shareAsImage() {
-            showToast("🎉 تم حفظ الصورة!\nالفائز: " + (teams[0].total > teams[1].total ? teams[0].name : teams[1].name));
-        }
-
-        function showToast(msg) {
-            const t = document.createElement('div');
-            t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#10b981;color:white;padding:16px 28px;border-radius:9999px;font-weight:600;box-shadow:0 10px 15px -3px rgba(0,0,0,0.4);z-index:100;";
-            t.textContent = msg;
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 3500);
-        }
-
-        function resetAll() {
-            if (confirm("هل تريد بدء جلسة جديدة؟")) location.reload();
-        }
-
-        window.onload = () => {
-            renderPlayerInputs();
-        };
-    </script>
+    box.remove();
+}
+</script>
 </body>
 </html>
