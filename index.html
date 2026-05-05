@@ -1,262 +1,441 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تركس</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-<!-- PWA / FAVICON SETUP -->
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" href="favicon.ico">
-
-<link rel="manifest" href="site.webmanifest">
-
-<meta name="msapplication-TileColor" content="#000000">
-<meta name="msapplication-TileImage" content="mstile-150x150.png">
-<meta name="theme-color" content="#000000">
-<style>
-    body {
-        font-family: 'Cairo', sans-serif;
-        background: linear-gradient(135deg, #0f172a, #1e2937, #020617);
-    }
-    .card {
-        transition: all 0.3s ease;
-    }
-    .card:hover {
-        transform: translateY(-8px) scale(1.03);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-    }
-    .btn {
-        background: linear-gradient(to right, #f59e0b, #ea580c);
-        transition: all 0.3s ease;
-    }
-    .btn:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 15px rgba(245, 158, 11, 0.4);
-    }
-    .input {
-        background: #1e2937;
-        border: 2px solid #334155;
-        transition: all 0.3s;
-    }
-    .input:focus {
-        border-color: #f59e0b;
-        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
-    }
-    .score-positive { color: #22c55e; text-shadow: 0 0 25px rgba(34, 197, 94, 0.8); }
-    .score-negative { color: #ef4444; text-shadow: 0 0 25px rgba(239, 68, 68, 0.8); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كونكان 71 & تركس</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e2937, #020617);
+        }
+        .btn {
+            background: linear-gradient(to right, #f59e0b, #ea580c);
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px rgba(245, 158, 11, 0.4);
+        }
+        .input {
+            background: #1e2937;
+            border: 2px solid #334155;
+            transition: all 0.3s;
+        }
+        .input:focus {
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+            text-align: center;
+        }
+        .score-positive { color: #22c55e; text-shadow: 0 0 25px rgba(34, 197, 94, 0.8); }
+        .score-negative { color: #ef4444; text-shadow: 0 0 25px rgba(239, 68, 68, 0.8); }
+        .tayro-text {
+            text-shadow: 0 0 15px rgba(234, 179, 8, 0.6);
+            font-weight: 700;
+        }
+        .card {
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+        .designer-footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-top: 40px;
+        }
+    </style>
 </head>
-<body class="text-white min-h-screen">
-<div class="max-w-2xl mx-auto p-6">
-
-<!-- HEADER -->
-<div class="text-center mb-8">
-    <h1 class="font-black tracking-wider mb-2 leading-tight whitespace-nowrap"
-        style="font-size: clamp(2rem, 6vw, 3rem);">
-        🃏♠️♥️ <span class="text-amber-300">تركس</span> ♦️♣️ 🃏
-    </h1>
-    <p class="text-amber-300"
-       style="font-size: clamp(1.5rem, 3.5vw, 2rem);">
-        تسجيل و توثيق 😉 📝
-    </p>
-</div>
-
-    <!-- SETUP -->
-    <div id="setup">
-        <div class="grid grid-cols-2 gap-4">
-            <input id="p0" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 1">
-            <input id="p2" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 2 (شريك)">
-            <input id="p1" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 3">
-            <input id="p3" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 4 (شريك)">
-        </div>
-        <button onclick="startGame()" class="btn w-full mt-8 py-5 text-xl font-bold rounded-3xl shadow-lg">
-            🚀 ابدأ اللعبة
-        </button>
-    </div>
-
-    <!-- GAME -->
-    <div id="game" class="hidden">
-        <div id="kingdoms" class="grid grid-cols-2 gap-4"></div>
-
-        <div id="scores" class="mt-8 bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl"></div>
-
-        <!-- Panel -->
-        <div id="panel" class="hidden mt-8 bg-slate-900/90 backdrop-blur-2xl p-8 rounded-3xl border border-amber-500/30">
-            <h3 id="panelTitle" class="text-2xl font-bold text-amber-300 mb-6 text-center"></h3>
-            
-            <div class="space-y-6">
-                <div>
-                    <label class="block text-amber-400 mb-2 text-lg">♠️♥️التركس♦️♣️ </label>
-                    <select id="trix" class="select w-full p-4 bg-slate-800 rounded-2xl text-xl"></select>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-pink-400 mb-2 text-lg">👸 البنات</label>
-                        <select id="girls" class="select w-full p-4 bg-slate-800 rounded-2xl text-xl"></select>
-                    </div>
-                    <div>
-                        <label class="block text-rose-400 mb-2 text-lg">👑 الختيار</label>
-                        <select id="king" class="select w-full p-4 bg-slate-800 rounded-2xl text-xl">
-                            <option value="0">لم يأكل</option>
-                            <option value="1">أكل 👑</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-yellow-400 mb-2 text-lg">♦️ الديناري</label>
-                        <select id="dinar" class="select w-full p-4 bg-slate-800 rounded-2xl text-xl"></select>
-                    </div>
-                    <div>
-                        <label class="block text-orange-400 mb-2 text-lg">🃏 اللطوش</label>
-                        <select id="lutoosh" class="select w-full p-4 bg-slate-800 rounded-2xl text-xl"></select>
-                    </div>
-                </div>
-            </div>
-
-            <button onclick="save()" class="btn w-full mt-10 py-5 text-xl font-bold rounded-3xl">
-                💾 حفظ المملكة
+<body class="text-white min-h-screen pb-12">
+<div class="max-w-2xl mx-auto p-4 sm:p-6">
+    <!-- اختيار اللعبة -->
+    <div id="gameSelector" class="text-center mb-10">
+        <h1 class="text-4xl font-black text-amber-300 mb-8">🎮 اختر اللعبة</h1>
+        <div class="grid grid-cols-2 gap-6">
+            <button onclick="selectGame('konkan')" class="bg-gradient-to-br from-amber-500 to-orange-600 p-10 rounded-3xl text-2xl font-bold hover:scale-105 transition-all shadow-xl">
+                🃏 كونكان 71
+            </button>
+            <button onclick="selectGame('trix')" class="bg-gradient-to-br from-indigo-600 to-purple-600 p-10 rounded-3xl text-2xl font-bold hover:scale-105 transition-all shadow-xl">
+                ♠️ تركس
             </button>
         </div>
     </div>
 
-    <!-- FINAL SCREEN -->
-    <div id="final" class="hidden text-center">
-        <button onclick="location.reload()" class="absolute top-6 left-6 bg-slate-700 hover:bg-slate-600 px-5 py-3 rounded-2xl text-sm">
-            🔄 لعبة جديدة
-        </button>
+    <!-- ==================== كونكان 71 ==================== -->
+    <div id="konkanApp" class="hidden">
+        <div class="text-center mb-8">
+            <h1 class="font-black tracking-wider mb-2 leading-tight" style="font-size: clamp(2.2rem, 6vw, 3rem);">
+                🃏♠️♥️ <span class="text-amber-300">كونكان 71</span> ♦️♣️ 🃏
+            </h1>
+            <p class="text-amber-300 text-2xl">تسجيل و توثيق</p>
+        </div>
+        <div id="k_setup">
+            <div class="grid grid-cols-2 gap-4">
+                <input id="k_p0" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 1">
+                <input id="k_p2" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 2 (شريك)">
+                <input id="k_p1" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 3">
+                <input id="k_p3" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 4 (شريك)">
+            </div>
+            <button onclick="startKonkan()" class="btn w-full mt-8 py-5 text-xl font-bold rounded-3xl shadow-lg">
+                🚀 ابدأ كونكان 71
+            </button>
+        </div>
+        <div id="k_game" class="hidden">
+            <div id="k_scores" class="mt-6 bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl"></div>
+           
+            <div class="mt-8 bg-slate-900/90 backdrop-blur-2xl p-8 rounded-3xl border border-amber-500/30">
+                <h3 class="text-2xl font-bold text-amber-300 mb-6 text-center">تسجيل جولة جديدة</h3>
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sky-400 mb-2 text-lg text-center">الفريق الأول</label>
+                        <input type="number" id="k_teamA" min="0" class="input w-full p-6 rounded-2xl text-center text-4xl font-bold" value="0">
+                    </div>
+                    <div>
+                        <label class="block text-emerald-400 mb-2 text-lg text-center">الفريق الثاني</label>
+                        <input type="number" id="k_teamB" min="0" class="input w-full p-6 rounded-2xl text-center text-4xl font-bold" value="0">
+                    </div>
+                </div>
+                <button onclick="saveKonkanRound()" class="btn w-full mt-8 py-6 text-xl font-bold rounded-3xl">
+                    💾 حفظ الجولة
+                </button>
+            </div>
+            <div id="k_roundsLog" class="mt-8 space-y-3"></div>
+        </div>
+        <div id="k_final" class="hidden text-center">
+            <button onclick="location.reload()" class="absolute top-6 left-6 bg-slate-700 hover:bg-slate-600 px-5 py-3 rounded-2xl text-sm">
+                🔄 لعبة جديدة
+            </button>
+            <div id="k_winner" class="mt-12 mb-10"></div>
+            <div id="k_finalScores" class="mb-10"></div>
+            <button onclick="exportKonkanImage()" class="btn w-full py-6 text-2xl font-bold rounded-3xl shadow-2xl">
+                📸 توثيق النتيجة
+            </button>
+        </div>
+    </div>
 
-        <div id="winner" class="mt-12 mb-10"></div>
-        <div id="finalScores" class="mb-10"></div>
+    <!-- ==================== تركس ==================== -->
+    <div id="trixApp" class="hidden">
+        <div class="text-center mb-8">
+            <h1 class="font-black tracking-wider mb-2 leading-tight" style="font-size: clamp(2rem, 6vw, 3rem);">
+                🃏♠️♥️ <span class="text-amber-300">تركس</span> ♦️♣️ 🃏
+            </h1>
+            <p class="text-amber-300 text-2xl">تسجيل و توثيق</p>
+        </div>
+        <div id="t_setup">
+            <div class="grid grid-cols-2 gap-4">
+                <input id="t_p0" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 1">
+                <input id="t_p2" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 2 (شريك)">
+                <input id="t_p1" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 3">
+                <input id="t_p3" class="input p-4 rounded-2xl text-center text-lg" placeholder="لاعب 4 (شريك)">
+            </div>
+            <button onclick="startTrix()" class="btn w-full mt-8 py-5 text-xl font-bold rounded-3xl shadow-lg">
+                🚀 ابدأ تركس
+            </button>
+        </div>
+        <div id="t_game" class="hidden">
+            <div id="kingdoms" class="grid grid-cols-2 gap-4"></div>
+            <div id="t_scores" class="mt-8 bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl"></div>
+            <div id="t_panel" class="hidden mt-8 bg-slate-900/90 backdrop-blur-2xl p-8 rounded-3xl border border-amber-500/30">
+                <h3 id="t_panelTitle" class="text-2xl font-bold text-amber-300 mb-6 text-center"></h3>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-amber-400 mb-2 text-lg">♠️♥️التركس♦️♣️</label>
+                        <select id="t_trix" class="input w-full p-4 rounded-2xl text-xl"></select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-pink-400 mb-2 text-lg">👸 البنات</label>
+                            <select id="t_girls" class="input w-full p-4 rounded-2xl text-xl"></select>
+                        </div>
+                        <div>
+                            <label class="block text-rose-400 mb-2 text-lg">👑 الختيار</label>
+                            <select id="t_king" class="input w-full p-4 rounded-2xl text-xl">
+                                <option value="0">لم يأكل</option>
+                                <option value="1">أكل 👑</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-yellow-400 mb-2 text-lg">♦️ الديناري</label>
+                            <select id="t_dinar" class="input w-full p-4 rounded-2xl text-xl"></select>
+                        </div>
+                        <div>
+                            <label class="block text-orange-400 mb-2 text-lg">🃏 اللطوش</label>
+                            <select id="t_lutoosh" class="input w-full p-4 rounded-2xl text-xl"></select>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="saveTrixKingdom()" class="btn w-full mt-10 py-5 text-xl font-bold rounded-3xl">
+                    💾 حفظ المملكة
+                </button>
+            </div>
+        </div>
+        <div id="t_final" class="hidden text-center">
+            <button onclick="location.reload()" class="absolute top-6 left-6 bg-slate-700 hover:bg-slate-600 px-5 py-3 rounded-2xl text-sm">
+                🔄 لعبة جديدة
+            </button>
+            <div id="t_winner" class="mt-12 mb-10"></div>
+            <div id="t_finalScores" class="mb-10"></div>
+            <button onclick="exportTrixImage()" class="btn w-full py-6 text-2xl font-bold rounded-3xl shadow-2xl">
+                📸 توثيق النتيجة
+            </button>
+        </div>
+    </div>
 
-        <button onclick="exportImage()" class="btn w-full py-6 text-2xl font-bold rounded-3xl shadow-2xl flex items-center justify-center gap-3">
-            📸 توثيق النتيجة
-        </button>
+    <!-- معلومات المصمم -->
+    <div class="designer-footer">
+        <p>إعداد و تصميم: <strong>Tarek Jawish</strong></p>
+        <p>tarekjawish89@gmail.com</p>
     </div>
 </div>
 
 <script>
-let players = [], teams = [], done = new Set(), log = [];
-let current = null;
-let gameStartTime = null;
-let kingdomStartTime = null;
+// ==================== كونكان 71 ====================
+let k_players = [], k_teams = [], k_roundNumber = 0, k_log = [], k_startTime = null;
 
-function startGame() {
-    players = [
-        document.getElementById('p0').value || "لاعب 1",
-        document.getElementById('p1').value || "لاعب 2",
-        document.getElementById('p2').value || "لاعب 3",
-        document.getElementById('p3').value || "لاعب 4"
-    ];
-
-    teams = [
-        { name: players[0] + " & " + players[2], score: 0 },
-        { name: players[1] + " & " + players[3], score: 0 }
-    ];
-
-    gameStartTime = Date.now();
-    document.getElementById('setup').classList.add('hidden');
-    document.getElementById('game').classList.remove('hidden');
-    
-    fillSelects();
-    renderKingdoms();
-    renderScores();
+function selectGame(game) {
+    document.getElementById('gameSelector').classList.add('hidden');
+    if (game === 'konkan') document.getElementById('konkanApp').classList.remove('hidden');
+    else {
+        document.getElementById('trixApp').classList.remove('hidden');
+        fillTrixSelects();
+    }
 }
 
-function fillSelects() {
-    const trix = document.getElementById('trix');
-    trix.innerHTML = [0,150,200,250,300,350].map(v => `<option value="${v}">${v}</option>`).join('');
+function startKonkan() {
+    k_players = [
+        document.getElementById('k_p0').value || "لاعب 1",
+        document.getElementById('k_p1').value || "لاعب 2",
+        document.getElementById('k_p2').value || "لاعب 3",
+        document.getElementById('k_p3').value || "لاعب 4"
+    ];
+    k_teams = [
+        { name: k_players[1] + " & " + k_players[3], score: 0 },
+        { name: k_players[0] + " & " + k_players[2], score: 0 }
+    ];
+    k_startTime = Date.now();
+    k_roundNumber = 0;
+    k_log = [];
+    document.getElementById('k_setup').classList.add('hidden');
+    document.getElementById('k_game').classList.remove('hidden');
+    renderKonkanScores();
+    renderKonkanLog();
+}
 
-    const girls = document.getElementById('girls');
-    girls.innerHTML = [0,1,2,3,4].map(v => `<option value="${v}">${v}</option>`).join('');
+function renderKonkanScores() {
+    const div = document.getElementById('k_scores');
+    const t0 = k_teams[0].score;
+    const t1 = k_teams[1].score;
+    const aHigher = t0 > t1;
 
-    const dinar = document.getElementById('dinar');
-    dinar.innerHTML = [...Array(14)].map((_,i) => `<option value="${i}">${i}</option>`).join('');
+    div.innerHTML = `
+        <div class="grid grid-cols-2 gap-8 text-center">
+            <div>
+                <div class="text-sky-400 text-sm font-bold">الفريق الأول</div>
+                <div class="text-6xl font-black ${aHigher ? 'score-negative' : 'score-positive'}">${t0}</div>
+                <div class="text-slate-400 text-sm mt-1">${k_teams[0].name}</div>
+                ${t0 >= 500 ? `<div class="mt-3 text-sky-400 tayro-text text-center text-base">${getRemaining(t0)}</div>` : ''}
+            </div>
+            <div>
+                <div class="text-emerald-400 text-sm font-bold">الفريق الثاني</div>
+                <div class="text-6xl font-black ${!aHigher && t1 !== t0 ? 'score-negative' : 'score-positive'}">${t1}</div>
+                <div class="text-slate-400 text-sm mt-1">${k_teams[1].name}</div>
+                ${t1 >= 500 ? `<div class="mt-3 text-emerald-400 tayro-text text-center text-base">${getRemaining(t1)}</div>` : ''}
+            </div>
+        </div>
+    `;
+}
 
-    const lutoosh = document.getElementById('lutoosh');
-    lutoosh.innerHTML = [...Array(14)].map((_,i) => `<option value="${i}">${i}</option>`).join('');
+function getRemaining(score) {
+    if (score < 500) return '';
+    const rem = 771 - score;
+    if (score >= 700) return `قربت الطيرة 🤣🤦🏻‍♂️<br><span class="text-3xl">باقي ${rem}</span>`;
+    if (score >= 600) return `يلا قربت 🤦🏻‍♂️😂<br><span class="text-3xl">باقي ${rem}</span>`;
+    return `باقي ${rem} لتطيرو 🥲😁<br>`;
+}
+
+function saveKonkanRound() {
+    const scoreA = parseInt(document.getElementById('k_teamA').value) || 0;
+    const scoreB = parseInt(document.getElementById('k_teamB').value) || 0;
+    if (scoreA === 0 && scoreB === 0) return alert("⚠️ أدخل نقاط على الأقل لفريق واحد");
+
+    k_roundNumber++;
+    k_teams[0].score += scoreA;
+    k_teams[1].score += scoreB;
+
+    k_log.push({
+        round: k_roundNumber,
+        teamA: scoreA,
+        teamB: scoreB,
+        time: Math.floor((Date.now() - k_startTime) / 1000)
+    });
+
+    document.getElementById('k_teamA').value = 0;
+    document.getElementById('k_teamB').value = 0;
+    renderKonkanScores();
+    renderKonkanLog();
+
+    if (k_teams[0].score >= 771 || k_teams[1].score >= 771) finishKonkanGame();
+}
+
+function renderKonkanLog() {
+    const container = document.getElementById('k_roundsLog');
+    container.innerHTML = k_log.map(r => {
+        const aHigher = r.teamA > r.teamB;
+        return `
+            <div class="bg-slate-800/70 p-4 rounded-2xl flex justify-between items-center">
+                <div class="font-bold">جولة ${r.round}</div>
+                <div class="text-center flex gap-5 text-2xl font-semibold">
+                    <span class="${aHigher ? 'text-red-500' : 'text-emerald-400'}">${r.teamA}</span>
+                    <span class="text-slate-500">-</span>
+                    <span class="${!aHigher && r.teamB > 0 ? 'text-red-500' : 'text-sky-400'}">${r.teamB}</span>
+                </div>
+                <div class="text-slate-400 text-sm">${r.time} ث</div>
+            </div>
+        `;
+    }).join('');
+}
+
+function finishKonkanGame() {
+    document.getElementById('k_game').classList.add('hidden');
+    document.getElementById('k_final').classList.remove('hidden');
+    const t0 = k_teams[0].score;
+    const t1 = k_teams[1].score;
+    const isDraw = t0 >= 771 && t1 >= 771;
+    const winnerTeam = t0 < 771 ? k_teams[0] : k_teams[1];
+
+    document.getElementById('k_winner').innerHTML = isDraw
+        ? `<div class="text-5xl font-black text-amber-300">تعادل في الخسارة!</div>`
+        : `<div class="text-6xl mb-4">🏆</div><div class="text-4xl font-black text-amber-300">الفريق الفائز</div>
+           <div class="inline-flex items-center gap-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 px-10 py-6 rounded-3xl text-4xl font-black mt-6 shadow-xl">${winnerTeam.name}</div>`;
+
+    document.getElementById('k_finalScores').innerHTML = `
+        <div class="grid grid-cols-2 gap-10 text-center max-w-md mx-auto">
+            <div class="${t0 >= 771 ? 'score-negative' : 'score-positive'}">
+                <div class="text-6xl font-black">${t0}</div>
+                <div class="text-sm mt-2">${k_teams[0].name}</div>
+            </div>
+            <div class="${t1 >= 771 ? 'score-negative' : 'score-positive'}">
+                <div class="text-6xl font-black">${t1}</div>
+                <div class="text-sm mt-2">${k_teams[1].name}</div>
+            </div>
+        </div>
+    `;
+}
+
+// ==================== تركس ====================
+let t_players = [], t_teams = [], t_done = new Set(), t_log = [], t_startTime = null, t_current = null, t_kingdomStart = null;
+
+function fillTrixSelects() {
+    document.getElementById('t_trix').innerHTML = [0,150,200,250,300,350].map(v => `<option value="${v}">${v}</option>`).join('');
+    document.getElementById('t_girls').innerHTML = [0,1,2,3,4].map(v => `<option value="${v}">${v}</option>`).join('');
+    document.getElementById('t_dinar').innerHTML = [...Array(14)].map((_,i) => `<option value="${i}">${i}</option>`).join('');
+    document.getElementById('t_lutoosh').innerHTML = [...Array(14)].map((_,i) => `<option value="${i}">${i}</option>`).join('');
+}
+
+function startTrix() {
+    t_players = [
+        document.getElementById('t_p0').value || "لاعب 1",
+        document.getElementById('t_p1').value || "لاعب 2",
+        document.getElementById('t_p2').value || "لاعب 3",
+        document.getElementById('t_p3').value || "لاعب 4"
+    ];
+    t_teams = [
+        { name: t_players[0] + " & " + t_players[2], score: 0 },
+        { name: t_players[1] + " & " + t_players[3], score: 0 }
+    ];
+    t_startTime = Date.now();
+    t_done.clear();
+    t_log = [];
+    document.getElementById('t_setup').classList.add('hidden');
+    document.getElementById('t_game').classList.remove('hidden');
+    renderKingdoms();
+    renderTrixScores();
 }
 
 function renderKingdoms() {
     const container = document.getElementById('kingdoms');
     container.innerHTML = '';
-    
     for(let i = 0; i < 4; i++) {
         const div = document.createElement('div');
         div.className = `card bg-slate-800/90 p-6 rounded-3xl text-center cursor-pointer border border-slate-700 hover:border-amber-400`;
         div.innerHTML = `
             <div class="text-4xl mb-3">🏰</div>
             <div class="font-bold text-xl">مملكة ${i+1}</div>
-            <div class="text-amber-300 mt-1">${players[i]}</div>
-            ${done.has(i) ? '<div class="text-green-400 mt-2">✅ مكتملة</div>' : ''}
+            <div class="text-amber-300 mt-1">${t_players[i]}</div>
+            ${t_done.has(i) ? '<div class="text-green-400 mt-2">✅ مكتملة</div>' : ''}
         `;
-        if(!done.has(i)) div.onclick = () => openKingdom(i);
+        if(!t_done.has(i)) div.onclick = () => openTrixKingdom(i);
         container.appendChild(div);
     }
 }
 
-function renderScores() {
-    const scoresDiv = document.getElementById('scores');
-    const s0 = teams[0].score;
-    const s1 = teams[1].score;
-    
-    scoresDiv.innerHTML = `
+function renderTrixScores() {
+    const div = document.getElementById('t_scores');
+    const s0 = t_teams[0].score;
+    const s1 = t_teams[1].score;
+    div.innerHTML = `
         <div class="grid grid-cols-2 gap-8 text-center">
             <div>
                 <div class="text-emerald-400 text-sm font-bold">الفريق الأخضر</div>
                 <div class="text-5xl font-black ${s0 >= 0 ? 'score-positive' : 'score-negative'}">${s0}</div>
-                <div class="text-slate-400 text-sm mt-1">${teams[0].name}</div>
+                <div class="text-slate-400 text-sm mt-1">${t_teams[0].name}</div>
             </div>
             <div>
                 <div class="text-sky-400 text-sm font-bold">الفريق الأزرق</div>
                 <div class="text-5xl font-black ${s1 >= 0 ? 'score-positive' : 'score-negative'}">${s1}</div>
-                <div class="text-slate-400 text-sm mt-1">${teams[1].name}</div>
+                <div class="text-slate-400 text-sm mt-1">${t_teams[1].name}</div>
             </div>
         </div>
     `;
 }
 
-function openKingdom(i) {
-    current = i;
-    kingdomStartTime = Date.now();
-    
-    document.getElementById('panel').classList.remove('hidden');
-    document.getElementById('panelTitle').innerHTML = `🏰 مملكة ${i+1} - ${players[i]}`;
-    
-    // Reset values
-    document.getElementById('trix').value = 0;
-    document.getElementById('girls').value = 0;
-    document.getElementById('king').value = 0;
-    document.getElementById('dinar').value = 0;
-    document.getElementById('lutoosh').value = 0;
+function openTrixKingdom(i) {
+    t_current = i;
+    t_kingdomStart = Date.now();
+    document.getElementById('t_panel').classList.remove('hidden');
+    document.getElementById('t_panelTitle').innerHTML = `🏰 مملكة ${i+1} - ${t_players[i]}`;
+    document.getElementById('t_trix').value = 0;
+    document.getElementById('t_girls').value = 0;
+    document.getElementById('t_king').value = 0;
+    document.getElementById('t_dinar').value = 0;
+    document.getElementById('t_lutoosh').value = 0;
 }
 
-function save() {
-    const t = +document.getElementById('trix').value;
-    const g = +document.getElementById('girls').value;
-    const k = +document.getElementById('king').value;
-    const d = +document.getElementById('dinar').value;
-    const l = +document.getElementById('lutoosh').value;
+function saveTrixKingdom() {
+    const t = +document.getElementById('t_trix').value;
+    const g = +document.getElementById('t_girls').value;
+    const k = +document.getElementById('t_king').value;
+    const d = +document.getElementById('t_dinar').value;
+    const l = +document.getElementById('t_lutoosh').value;
 
     const A = t - g*25 - k*75 - d*10 - l*15;
     const B = (500 - t) - (4 - g)*25 - (1 - k)*75 - (13 - d)*10 - (13 - l)*15;
 
-    const teamA = current % 2 === 0 ? 0 : 1;
-    teams[teamA].score += A;
-    teams[1 - teamA].score += B;
+    const teamA = t_current % 2 === 0 ? 0 : 1;
+    t_teams[teamA].score += A;
+    t_teams[1 - teamA].score += B;
 
-    const duration = Math.floor((Date.now() - kingdomStartTime) / 1000);
+    const duration = Math.floor((Date.now() - t_kingdomStart) / 1000);
 
-    log.push({
-        kingdom: current + 1,
-        player: players[current],
+    t_log.push({
+        kingdom: t_current + 1,
+        player: t_players[t_current],
         time: duration,
         trix: t,
         girls: g,
@@ -265,150 +444,146 @@ function save() {
         lutoosh: l
     });
 
-    done.add(current);
-    document.getElementById('panel').classList.add('hidden');
-    
+    t_done.add(t_current);
+    document.getElementById('t_panel').classList.add('hidden');
     renderKingdoms();
-    renderScores();
+    renderTrixScores();
 
-    if(done.size === 4) finishGame();
+    if(t_done.size === 4) finishTrixGame();
 }
 
-function finishGame() {
-    document.getElementById('game').classList.add('hidden');
-    document.getElementById('final').classList.remove('hidden');
-
-    const s0 = teams[0].score;
-    const s1 = teams[1].score;
-    const winnerTeam = s0 > s1 ? teams[0] : teams[1];
+function finishTrixGame() {
+    document.getElementById('t_game').classList.add('hidden');
+    document.getElementById('t_final').classList.remove('hidden');
+    const s0 = t_teams[0].score;
+    const s1 = t_teams[1].score;
     const isDraw = s0 === s1;
+    const winnerTeam = s0 > s1 ? t_teams[0] : t_teams[1];
 
-    let winnerHTML = '';
+    document.getElementById('t_winner').innerHTML = isDraw
+        ? `<div class="text-6xl mb-4">🤝</div><div class="text-4xl font-black text-amber-300">تعادل!</div>`
+        : `<div class="inline-flex items-center gap-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 px-10 py-6 rounded-3xl text-5xl font-black shadow-2xl">👑 ${winnerTeam.name}</div>`;
 
-    if(isDraw) {
-        winnerHTML = `
-            <div class="text-6xl mb-4">🤝</div>
-            <div class="text-4xl font-black text-amber-300">تعادل!</div>
-            <p class="text-2xl mt-4 text-slate-400">دق وأخوه للحسم 😄</p>
-        `;
-    } else {
-        winnerHTML = `
-            <div class="inline-flex items-center gap-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 px-10 py-6 rounded-3xl text-5xl font-black shadow-2xl">
-                👑 ${winnerTeam.name}
-            </div>
-            <div class="flex justify-center gap-6 mt-8 text-6xl">
-                👏😂🎉
-            </div>
-            <p class="text-3xl mt-6 text-amber-300 font-bold">الفريق الفائز</p>
-        `;
-    }
-
-    document.getElementById('winner').innerHTML = winnerHTML;
-
-    // Final Scores
-    document.getElementById('finalScores').innerHTML = `
+    document.getElementById('t_finalScores').innerHTML = `
         <div class="grid grid-cols-2 gap-10 text-center max-w-md mx-auto">
             <div class="${s0 >= 0 ? 'score-positive' : 'score-negative'}">
                 <div class="text-6xl font-black">${s0}</div>
-                <div class="text-sm mt-2">${teams[0].name}</div>
+                <div class="text-sm mt-2">${t_teams[0].name}</div>
             </div>
             <div class="${s1 >= 0 ? 'score-positive' : 'score-negative'}">
                 <div class="text-6xl font-black">${s1}</div>
-                <div class="text-sm mt-2">${teams[1].name}</div>
+                <div class="text-sm mt-2">${t_teams[1].name}</div>
             </div>
         </div>
     `;
 }
 
-async function exportImage() {
-    const totalTime = Math.floor((Date.now() - gameStartTime) / 1000);
+// ====================== تصدير الصور ======================
+function getFormattedDateTime() {
+    const now = new Date();
+    const dayName = now.toLocaleDateString('ar-EG', { weekday: 'long' });
+    const date = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
+    
+    let hours = now.getHours();
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    const time = `${hours}:${minutes} ${ampm}`;
+
+    return `${dayName} - ${date} - الساعة: ${time}`;
+}
+
+async function exportKonkanImage() {
+    const totalTime = Math.floor((Date.now() - k_startTime) / 1000);
     const minutes = Math.floor(totalTime / 60);
     const seconds = totalTime % 60;
-    const totalTimeStr = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-
-    const s0 = teams[0].score;
-    const s1 = teams[1].score;
-    const isDraw = s0 === s1;
-    const winnerName = isDraw ? "تعادل" : (s0 > s1 ? teams[0].name : teams[1].name);
-
-    const now = new Date();
-
-const dayName = now.toLocaleDateString('ar-EG', {
-    weekday: 'long'
-});
-
-const day = String(now.getDate()).padStart(2, '0');
-const month = String(now.getMonth() + 1).padStart(2, '0');
-const year = now.getFullYear();
-
-const timeRaw = now.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true
-});
-
-const today = `${day}/${month}/${year} - ${dayName} الساعة: ${timeRaw}`;
+    const dateTimeStr = getFormattedDateTime();
 
     let box = document.createElement("div");
-    box.style.cssText = `
-        padding: 30px; 
-        background: linear-gradient(135deg, #0f172a, #1e2937);
-        color: white; 
-        width: 420px; 
-        font-family: Cairo, sans-serif;
-        border-radius: 20px;
-        box-shadow: 0 0 40px rgba(245, 158, 11, 0.3);
+    box.style.cssText = `padding: 30px; background: linear-gradient(135deg, #0f172a, #1e2937); color: white; width: 480px; font-family: Cairo, sans-serif; border-radius: 24px; box-shadow: 0 0 50px rgba(245, 158, 11, 0.4);`;
+    
+    box.innerHTML = `
+        <div style="text-align:center; margin-bottom:25px">
+            <div style="font-size:48px; margin-bottom:10px">♠️♥️🃏♦️♣️</div>
+            <h2 style="font-size:32px; font-weight:900; color:#fcd34d">كونكان 71</h2>
+            <p style="color:#f59e0b; font-size:22px; margin:12px 0 6px 0">النتيجة النهائية</p>
+            <p style="color:#94a3b8; font-size:17px">${dateTimeStr}</p>
+        </div>
+        <div style="background:#1e2937; padding:20px; border-radius:16px; margin:20px 0;">
+            ${k_log.map(r => `
+                <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #334155;">
+                    <div style="font-weight:600;">جولة ${r.round}</div>
+                    <div style="font-size:19px">
+                        <span style="color:#38bdf8">${r.teamA}</span>
+                        <span style="color:#64748b">-</span>
+                        <span style="color:#34d399">${r.teamB}</span>
+                    </div>
+                    <div style="color:#94a3b8">${r.time}ث</div>
+                </div>
+            `).join('')}
+        </div>
+        <div style="text-align:center; font-size:26px; line-height:1.4; margin:25px 0;">
+            <div>${k_teams[0].name}: <strong>${k_teams[0].score}</strong></div>
+            <div>${k_teams[1].name}: <strong>${k_teams[1].score}</strong></div>
+        </div>
+        <div style="text-center text-slate-400 text-sm">
+            المدة الكلية: ${minutes}:${seconds < 10 ? '0' : ''}${seconds} دقيقة
+        </div>
     `;
 
+    document.body.appendChild(box);
+    const canvas = await html2canvas(box, { scale: 3, backgroundColor: "#0f172a" });
+    const link = document.createElement("a");
+    link.download = `كونكان71_${new Date().toISOString().slice(0,10)}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+    box.remove();
+}
+
+async function exportTrixImage() {
+    const totalTime = Math.floor((Date.now() - t_startTime) / 1000);
+    const minutes = Math.floor(totalTime / 60);
+    const seconds = totalTime % 60;
+    const dateTimeStr = getFormattedDateTime();
+
+    let box = document.createElement("div");
+    box.style.cssText = `padding: 30px; background: linear-gradient(135deg, #0f172a, #1e2937); color: white; width: 420px; font-family: Cairo, sans-serif; border-radius: 20px; box-shadow: 0 0 40px rgba(245, 158, 11, 0.3);`;
+    
     box.innerHTML = `
         <div style="text-align:center; margin-bottom:20px">
             <div style="font-size:42px; margin-bottom:8px">♠️♥️🃏♦️♣️</div>
-            <h2 style="font-size:28px; font-weight:900; color:#fcd34d">${isDraw ? '🤝 تعادل' : '👑 الفريق الفائز'}</h2>
-            <p style="font-size:22px; color:#f59e0b; margin-top:8px">${winnerName}</p>
-            <p style="color:#94a3b8; margin-top:12px">📅 ${today}</p>
+            <h2 style="font-size:28px; font-weight:900; color:#fcd34d">تركس</h2>
+            <p style="font-size:22px; color:#f59e0b; margin-top:8px">${t_teams[0].score > t_teams[1].score ? t_teams[0].name : t_teams[1].name}</p>
+            <p style="color:#94a3b8; margin-top:12px">${dateTimeStr}</p>
         </div>
-
         <div style="background:#1e2937; padding:15px; border-radius:16px; margin:20px 0;">
-            ${log.map(x => `
+            ${t_log.map(x => `
                 <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #334155;">
-                    <div>
-                        <strong>🏰 مملكة ${x.kingdom}</strong><br>
-                        <span style="color:#cbd5e1">${x.player}</span>
-                    </div>
+                    <div><strong>🏰 مملكة ${x.kingdom}</strong><br><span style="color:#cbd5e1">${x.player}</span></div>
                     <div style="text-align:right; color:#94a3b8">
                         ⏱ ${x.time} ث<br>
-                        ♥️♠️♦️♣️ ${x.trix} | 👸 ${x.girls} | 👑 ${x.king}<br>
+                        ♥️ ${x.trix} | 👸 ${x.girls} | 👑 ${x.king}<br>
                         ♦️ ${x.dinar} | 🃏 ${x.lutoosh}
                     </div>
                 </div>
             `).join('')}
         </div>
-
-<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font-size:20px; line-height:1.3;">
-
-    <div style="color:${teams[0].score >= 0 ? '#22c55e' : '#ef4444'}; margin:2px 0;">
-        ${teams[0].score >= 0 ? '🟢' : '🔴'} ${teams[0].name}: <strong>${teams[0].score}</strong>
-    </div>
-
-    <div style="color:${teams[1].score >= 0 ? '#22c55e' : '#ef4444'}; margin:2px 0;">
-        ${teams[1].score >= 0 ? '🟢' : '🔴'} ${teams[1].name}: <strong>${teams[1].score}</strong>
-    </div>
-
-</div>
-
+        <div style="text-align:center; font-size:20px;">
+            <div>${t_teams[0].name}: <strong>${t_teams[0].score}</strong></div>
+            <div>${t_teams[1].name}: <strong>${t_teams[1].score}</strong></div>
+        </div>
         <div style="text-center mt-8 text-slate-400 text-sm">
-            الوقت الكلي: ${totalTimeStr} دقيقة
+            الوقت الكلي: ${minutes}:${seconds < 10 ? '0' : ''}${seconds} دقيقة
         </div>
     `;
 
     document.body.appendChild(box);
-
     const canvas = await html2canvas(box, { scale: 3, backgroundColor: "#0f172a" });
     const link = document.createElement("a");
-    link.download = `تركس_${winnerName}_${today}.png`;
+    link.download = `تركس_${new Date().toISOString().slice(0,10)}.png`;
     link.href = canvas.toDataURL("image/png");
     link.click();
-
     box.remove();
 }
 </script>
