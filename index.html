@@ -15,6 +15,8 @@
         .btn {
             background: linear-gradient(to right, #f59e0b, #ea580c);
             transition: all 0.3s ease;
+            padding: 1.25rem;
+            font-size: 1.1rem;
         }
         .btn:hover {
             transform: scale(1.05);
@@ -24,6 +26,7 @@
             background: #1e2937;
             border: 2px solid #334155;
             transition: all 0.3s;
+            font-size: 1.1rem;
         }
         .input:focus {
             border-color: #f59e0b;
@@ -53,19 +56,21 @@
         }
         .designer-footer {
             text-align: center;
-            padding: 20px;
+            padding: 20px 8px;
             color: #64748b;
-            font-size: 0.95rem;
-            margin-top: 40px;
+            font-size: 0.9rem;
+            margin-top: 50px;
         }
     </style>
 </head>
 <body class="text-white min-h-screen pb-12">
-<div class="max-w-2xl mx-auto p-4 sm:p-6">
+<div class="max-w-2xl mx-auto p-4 sm:p-6 md:p-8">
+
     <!-- اختيار اللعبة -->
     <div id="gameSelector" class="text-center mb-10">
-        <h1 class="text-4xl font-black text-amber-300 mb-8">🎮 اختر اللعبة</h1>
-        <div class="grid grid-cols-2 gap-6">
+        <h1 class="text-4xl font-black text-amber-300 mb-3">🎮 اختر اللعبة</h1>
+        <p class="text-2xl text-emerald-400 font-medium">تسجيل و توثيق 😉 📝</p>
+        <div class="grid grid-cols-2 gap-6 mt-10">
             <button onclick="selectGame('konkan')" class="bg-gradient-to-br from-amber-500 to-orange-600 p-10 rounded-3xl text-2xl font-bold hover:scale-105 transition-all shadow-xl">
                 🃏 كونكان 71
             </button>
@@ -102,11 +107,11 @@
                 <div class="grid grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sky-400 mb-2 text-lg text-center">الفريق الأول</label>
-                        <input type="number" id="k_teamA" min="0" class="input w-full p-6 rounded-2xl text-center text-4xl font-bold" value="0">
+                        <input type="number" id="k_teamA" min="0" class="input w-full p-6 rounded-2xl text-center text-3xl sm:text-4xl font-bold" value="0">
                     </div>
                     <div>
                         <label class="block text-emerald-400 mb-2 text-lg text-center">الفريق الثاني</label>
-                        <input type="number" id="k_teamB" min="0" class="input w-full p-6 rounded-2xl text-center text-4xl font-bold" value="0">
+                        <input type="number" id="k_teamB" min="0" class="input w-full p-6 rounded-2xl text-center text-3xl sm:text-4xl font-bold" value="0">
                     </div>
                 </div>
                 <button onclick="saveKonkanRound()" class="btn w-full mt-8 py-6 text-xl font-bold rounded-3xl">
@@ -247,13 +252,13 @@ function renderKonkanScores() {
         <div class="grid grid-cols-2 gap-8 text-center">
             <div>
                 <div class="text-sky-400 text-sm font-bold">الفريق الأول</div>
-                <div class="text-6xl font-black ${aHigher ? 'score-negative' : 'score-positive'}">${t0}</div>
+                <div class="text-5xl sm:text-6xl font-black ${aHigher ? 'score-negative' : 'score-positive'}">${t0}</div>
                 <div class="text-slate-400 text-sm mt-1">${k_teams[0].name}</div>
                 ${t0 >= 500 ? `<div class="mt-3 text-sky-400 tayro-text text-center text-base">${getRemaining(t0)}</div>` : ''}
             </div>
             <div>
                 <div class="text-emerald-400 text-sm font-bold">الفريق الثاني</div>
-                <div class="text-6xl font-black ${!aHigher && t1 !== t0 ? 'score-negative' : 'score-positive'}">${t1}</div>
+                <div class="text-5xl sm:text-6xl font-black ${!aHigher && t1 !== t0 ? 'score-negative' : 'score-positive'}">${t1}</div>
                 <div class="text-slate-400 text-sm mt-1">${k_teams[1].name}</div>
                 ${t1 >= 500 ? `<div class="mt-3 text-emerald-400 tayro-text text-center text-base">${getRemaining(t1)}</div>` : ''}
             </div>
@@ -393,12 +398,12 @@ function renderTrixScores() {
         <div class="grid grid-cols-2 gap-8 text-center">
             <div>
                 <div class="text-emerald-400 text-sm font-bold">الفريق الأخضر</div>
-                <div class="text-5xl font-black ${s0 >= 0 ? 'score-positive' : 'score-negative'}">${s0}</div>
+                <div class="text-5xl sm:text-6xl font-black ${s0 >= 0 ? 'score-positive' : 'score-negative'}">${s0}</div>
                 <div class="text-slate-400 text-sm mt-1">${t_teams[0].name}</div>
             </div>
             <div>
                 <div class="text-sky-400 text-sm font-bold">الفريق الأزرق</div>
-                <div class="text-5xl font-black ${s1 >= 0 ? 'score-positive' : 'score-negative'}">${s1}</div>
+                <div class="text-5xl sm:text-6xl font-black ${s1 >= 0 ? 'score-positive' : 'score-negative'}">${s1}</div>
                 <div class="text-slate-400 text-sm mt-1">${t_teams[1].name}</div>
             </div>
         </div>
@@ -500,8 +505,12 @@ async function exportKonkanImage() {
     const seconds = totalTime % 60;
     const dateTimeStr = getFormattedDateTime();
 
+    const t0 = k_teams[0].score;
+    const t1 = k_teams[1].score;
+    const winnerIsTeam0 = t0 < 771;
+
     let box = document.createElement("div");
-    box.style.cssText = `padding: 30px; background: linear-gradient(135deg, #0f172a, #1e2937); color: white; width: 480px; font-family: Cairo, sans-serif; border-radius: 24px; box-shadow: 0 0 50px rgba(245, 158, 11, 0.4);`;
+    box.style.cssText = `padding: 30px; background: linear-gradient(135deg, #0f172a, #1e2937); color: white; width: 460px; font-family: Cairo, sans-serif; border-radius: 24px; box-shadow: 0 0 50px rgba(245, 158, 11, 0.4);`;
     
     box.innerHTML = `
         <div style="text-align:center; margin-bottom:25px">
@@ -523,9 +532,9 @@ async function exportKonkanImage() {
                 </div>
             `).join('')}
         </div>
-        <div style="text-align:center; font-size:26px; line-height:1.4; margin:25px 0;">
-            <div>${k_teams[0].name}: <strong>${k_teams[0].score}</strong></div>
-            <div>${k_teams[1].name}: <strong>${k_teams[1].score}</strong></div>
+        <div style="text-align:center; font-size:26px; line-height:1.4; margin:25px 0; padding:15px 0; border-top: 3px solid ${winnerIsTeam0 ? '#22c55e' : '#ef4444'};">
+            <div style="color: ${winnerIsTeam0 ? '#22c55e' : '#ef4444'}">${k_teams[0].name}: <strong>${k_teams[0].score}</strong></div>
+            <div style="color: ${!winnerIsTeam0 ? '#22c55e' : '#ef4444'}">${k_teams[1].name}: <strong>${k_teams[1].score}</strong></div>
         </div>
         <div style="text-center text-slate-400 text-sm">
             المدة الكلية: ${minutes}:${seconds < 10 ? '0' : ''}${seconds} دقيقة
@@ -547,6 +556,10 @@ async function exportTrixImage() {
     const seconds = totalTime % 60;
     const dateTimeStr = getFormattedDateTime();
 
+    const s0 = t_teams[0].score;
+    const s1 = t_teams[1].score;
+    const winnerIsTeam0 = s0 > s1;
+
     let box = document.createElement("div");
     box.style.cssText = `padding: 30px; background: linear-gradient(135deg, #0f172a, #1e2937); color: white; width: 420px; font-family: Cairo, sans-serif; border-radius: 20px; box-shadow: 0 0 40px rgba(245, 158, 11, 0.3);`;
     
@@ -554,7 +567,7 @@ async function exportTrixImage() {
         <div style="text-align:center; margin-bottom:20px">
             <div style="font-size:42px; margin-bottom:8px">♠️♥️🃏♦️♣️</div>
             <h2 style="font-size:28px; font-weight:900; color:#fcd34d">تركس</h2>
-            <p style="font-size:22px; color:#f59e0b; margin-top:8px">${t_teams[0].score > t_teams[1].score ? t_teams[0].name : t_teams[1].name}</p>
+            <p style="font-size:22px; color:#f59e0b; margin-top:8px">${winnerIsTeam0 ? t_teams[0].name : t_teams[1].name}</p>
             <p style="color:#94a3b8; margin-top:12px">${dateTimeStr}</p>
         </div>
         <div style="background:#1e2937; padding:15px; border-radius:16px; margin:20px 0;">
@@ -569,9 +582,9 @@ async function exportTrixImage() {
                 </div>
             `).join('')}
         </div>
-        <div style="text-align:center; font-size:20px;">
-            <div>${t_teams[0].name}: <strong>${t_teams[0].score}</strong></div>
-            <div>${t_teams[1].name}: <strong>${t_teams[1].score}</strong></div>
+        <div style="text-align:center; font-size:20px; padding:15px 0; border-top: 3px solid ${winnerIsTeam0 ? '#22c55e' : '#ef4444'};">
+            <div style="color: ${winnerIsTeam0 ? '#22c55e' : '#ef4444'}">${t_teams[0].name}: <strong>${t_teams[0].score}</strong></div>
+            <div style="color: ${!winnerIsTeam0 ? '#22c55e' : '#ef4444'}">${t_teams[1].name}: <strong>${t_teams[1].score}</strong></div>
         </div>
         <div style="text-center mt-8 text-slate-400 text-sm">
             الوقت الكلي: ${minutes}:${seconds < 10 ? '0' : ''}${seconds} دقيقة
