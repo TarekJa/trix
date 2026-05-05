@@ -563,8 +563,7 @@ async function exportKonkanImage() {
         </div>
         <div style="text-align:center; font-size:26px; line-height:1.4; margin:25px 0; padding:20px 0; border-top: 4px solid ${winnerIsTeam0 ? '#22c55e' : '#ef4444'};">
             <div style="color: ${winnerIsTeam0 ? '#22c55e' : '#ef4444'}; font-size:28px; text-shadow: 0 0 15px ${winnerIsTeam0 ? 'rgba(34,197,94,0.6)' : 'rgba(239,68,68,0.6)'};">
-               ${winnerIsTeam0 ? '🏆 
-' : ''} ${k_teams[0].name}: <strong>${k_teams[0].score}</strong>
+               ${winnerIsTeam0 ? '🏆 ' : ''}${k_teams[0].name}: <strong>${k_teams[0].score}</strong>
             </div>
             <div style="color: ${!winnerIsTeam0 ? '#22c55e' : '#ef4444'}; font-size:28px; margin-top:12px; text-shadow: 0 0 15px ${!winnerIsTeam0 ? 'rgba(34,197,94,0.6)' : 'rgba(239,68,68,0.6)'};">
                ${!winnerIsTeam0 ? '🏆 الفائز' : ''} ${k_teams[1].name}: <strong>${k_teams[1].score}</strong>
