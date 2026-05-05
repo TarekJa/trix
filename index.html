@@ -7,6 +7,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<!-- PWA / FAVICON SETUP -->
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" href="favicon.ico">
+
+<link rel="manifest" href="site.webmanifest">
+
+<meta name="msapplication-TileColor" content="#000000">
+<meta name="msapplication-TileImage" content="mstile-150x150.png">
+<meta name="theme-color" content="#000000">
     <style>
         body {
             font-family: 'Cairo', sans-serif;
@@ -552,7 +563,8 @@ async function exportKonkanImage() {
         </div>
         <div style="text-align:center; font-size:26px; line-height:1.4; margin:25px 0; padding:20px 0; border-top: 4px solid ${winnerIsTeam0 ? '#22c55e' : '#ef4444'};">
             <div style="color: ${winnerIsTeam0 ? '#22c55e' : '#ef4444'}; font-size:28px; text-shadow: 0 0 15px ${winnerIsTeam0 ? 'rgba(34,197,94,0.6)' : 'rgba(239,68,68,0.6)'};">
-               ${winnerIsTeam0 ? '🏆 الفائز' : ''} ${k_teams[0].name}: <strong>${k_teams[0].score}</strong>
+               ${winnerIsTeam0 ? '🏆 
+' : ''} ${k_teams[0].name}: <strong>${k_teams[0].score}</strong>
             </div>
             <div style="color: ${!winnerIsTeam0 ? '#22c55e' : '#ef4444'}; font-size:28px; margin-top:12px; text-shadow: 0 0 15px ${!winnerIsTeam0 ? 'rgba(34,197,94,0.6)' : 'rgba(239,68,68,0.6)'};">
                ${!winnerIsTeam0 ? '🏆 الفائز' : ''} ${k_teams[1].name}: <strong>${k_teams[1].score}</strong>
