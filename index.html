@@ -84,9 +84,9 @@
     <div id="konkanApp" class="hidden">
         <div class="text-center mb-8">
             <h1 class="font-black tracking-wider mb-2 leading-tight" style="font-size: clamp(2.2rem, 6vw, 3rem);">
-                🃏♠️♥️ <span class="text-amber-300">كونكان 71</span> ♦️♣️ 🃏
+                🃏♠️♥️ <span class="text-amber-250">كونكان 71</span> ♦️♣️ 🃏
             </h1>
-            <p class="text-amber-300 text-2xl">تسجيل و توثيق</p>
+            <p class="text-amber-300 text-2xl">تسجيل و توثيق 😉 📝</p>
         </div>
         <div id="k_setup">
             <div class="grid grid-cols-2 gap-4">
@@ -136,9 +136,9 @@
     <div id="trixApp" class="hidden">
         <div class="text-center mb-8">
             <h1 class="font-black tracking-wider mb-2 leading-tight" style="font-size: clamp(2rem, 6vw, 3rem);">
-                🃏♠️♥️ <span class="text-amber-300">تركس</span> ♦️♣️ 🃏
+                ♠️♥️ <span class="text-amber-300">تركس</span> ♦️♣️
             </h1>
-            <p class="text-amber-300 text-2xl">تسجيل و توثيق</p>
+            <p class="text-amber-300 text-2xl">تتسجيل و توثيق 😉 📝</p>
         </div>
         <div id="t_setup">
             <div class="grid grid-cols-2 gap-4">
@@ -344,8 +344,8 @@ function finishKonkanGame() {
 
     document.getElementById('k_winner').innerHTML = isDraw
         ? `<div class="text-5xl font-black text-amber-300">تعادل في الخسارة!</div>`
-        : `<div class="text-6xl mb-6">🎉👏🏆</div>
-           <div class="text-4xl font-black text-amber-300">الفائز 🎉</div>
+        : `<div class="text-6xl mb-6">👏😂</div>
+           <div class="text-4xl font-black text-amber-300">الفائز 🏆</div>
            <div class="inline-flex items-center gap-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 px-10 py-6 rounded-3xl text-4xl font-black mt-6 shadow-xl">
                ${winnerTeam.name}
            </div>`;
@@ -419,12 +419,12 @@ function renderTrixScores() {
     div.innerHTML = `
         <div class="grid grid-cols-2 gap-8 text-center">
             <div>
-                <div class="text-emerald-400 text-sm font-bold">الفريق الأخضر</div>
+                <div class="text-emerald-400 text-sm font-bold">الفريق الأول</div>
                 <div class="text-5xl sm:text-6xl font-black ${s0 >= 0 ? 'score-positive' : 'score-negative'}">${s0}</div>
                 <div class="text-slate-400 text-sm mt-1">${t_teams[0].name}</div>
             </div>
             <div>
-                <div class="text-sky-400 text-sm font-bold">الفريق الأزرق</div>
+                <div class="text-sky-400 text-sm font-bold">الفريق الثاني</div>
                 <div class="text-5xl sm:text-6xl font-black ${s1 >= 0 ? 'score-positive' : 'score-negative'}">${s1}</div>
                 <div class="text-slate-400 text-sm mt-1">${t_teams[1].name}</div>
             </div>
@@ -489,9 +489,9 @@ function finishTrixGame() {
     const winnerTeam = t_teams[winnerIndex];
 
     document.getElementById('t_winner').innerHTML = isDraw
-        ? `<div class="text-6xl mb-4">🤝</div><div class="text-4xl font-black text-amber-300">تعادل!</div>`
-        : `<div class="text-6xl mb-6">🎉👏🏆</div>
-           <div class="text-4xl font-black text-amber-300">الفائز 🎉</div>
+        ? `<div class="text-6xl mb-4">🤝</div><div class="text-4xl font-black text-amber-300">تعادل! دق و اخوه 😉</div>`
+        : `<div class="text-6xl mb-6">👏😂</div>
+           <div class="text-4xl font-black text-amber-300">الفائز 🏆</div>
            <div class="inline-flex items-center gap-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 px-10 py-6 rounded-3xl text-5xl font-black shadow-2xl">
                ${winnerTeam.name}
            </div>`;
