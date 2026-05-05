@@ -107,11 +107,11 @@
                 <div class="grid grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sky-400 mb-2 text-lg text-center">الفريق الأول</label>
-                        <input type="number" id="k_teamA" min="0" class="input w-full p-6 rounded-2xl text-center text-3xl sm:text-4xl font-bold" value="0">
+                        <input type="number" id="k_teamA" min="0" class="input w-full p-6 rounded-2xl text-center text-3xl sm:text-4xl font-bold" placeholder="0">
                     </div>
                     <div>
                         <label class="block text-emerald-400 mb-2 text-lg text-center">الفريق الثاني</label>
-                        <input type="number" id="k_teamB" min="0" class="input w-full p-6 rounded-2xl text-center text-3xl sm:text-4xl font-bold" value="0">
+                        <input type="number" id="k_teamB" min="0" class="input w-full p-6 rounded-2xl text-center text-3xl sm:text-4xl font-bold" placeholder="0">
                     </div>
                 </div>
                 <button onclick="saveKonkanRound()" class="btn w-full mt-8 py-6 text-xl font-bold rounded-3xl">
@@ -274,10 +274,27 @@ function getRemaining(score) {
     return `باقي ${rem} لتطيرو 🥲😁<br>`;
 }
 
+// ربط الحقول مع بعضها (واحد فقط يأخذ نقاط)
+document.addEventListener('input', function(e) {
+    if (e.target.id === 'k_teamA') {
+        const b = document.getElementById('k_teamB');
+        if (e.target.value !== '') b.value = '';
+    }
+    if (e.target.id === 'k_teamB') {
+        const a = document.getElementById('k_teamA');
+        if (e.target.value !== '') a.value = '';
+    }
+});
+
 function saveKonkanRound() {
-    const scoreA = parseInt(document.getElementById('k_teamA').value) || 0;
-    const scoreB = parseInt(document.getElementById('k_teamB').value) || 0;
-    if (scoreA === 0 && scoreB === 0) return alert("⚠️ أدخل نقاط على الأقل لفريق واحد");
+    let scoreA = parseInt(document.getElementById('k_teamA').value) || 0;
+    let scoreB = parseInt(document.getElementById('k_teamB').value) || 0;
+
+    // ضمان أن فريق واحد فقط يأخذ نقاط
+    if (scoreA > 0 && scoreB > 0) {
+        scoreB = 0;
+    }
+    if (scoreA === 0 && scoreB === 0) return alert("⚠️ أدخل نقاط لفريق واحد على الأقل");
 
     k_roundNumber++;
     k_teams[0].score += scoreA;
@@ -290,8 +307,8 @@ function saveKonkanRound() {
         time: Math.floor((Date.now() - k_startTime) / 1000)
     });
 
-    document.getElementById('k_teamA').value = 0;
-    document.getElementById('k_teamB').value = 0;
+    document.getElementById('k_teamA').value = '';
+    document.getElementById('k_teamB').value = '';
     renderKonkanScores();
     renderKonkanLog();
 
@@ -322,13 +339,17 @@ function finishKonkanGame() {
     const t0 = k_teams[0].score;
     const t1 = k_teams[1].score;
     const isDraw = t0 >= 771 && t1 >= 771;
-    const winnerTeam = t0 < 771 ? k_teams[0] : k_teams[1];
+    const winnerIndex = t0 < 771 ? 0 : 1;
+    const winnerTeam = k_teams[winnerIndex];
 
     document.getElementById('k_winner').innerHTML = isDraw
         ? `<div class="text-5xl font-black text-amber-300">تعادل في الخسارة!</div>`
-        : `<div class="text-6xl mb-4">🏆</div><div class="text-4xl font-black text-amber-300">الفريق الفائز</div>
-           <div class="inline-flex items-center gap-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 px-10 py-6 rounded-3xl text-4xl font-black mt-6 shadow-xl">${winnerTeam.name}</div>`;
-
+        : `<div class="text-6xl mb-6">🎉👏🏆</div>
+           <div class="text-4xl font-black text-amber-300">الفائز 🎉</div>
+           <div class="inline-flex items-center gap-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 px-10 py-6 rounded-3xl text-4xl font-black mt-6 shadow-xl">
+               ${winnerTeam.name}
+           </div>`;
+    
     document.getElementById('k_finalScores').innerHTML = `
         <div class="grid grid-cols-2 gap-10 text-center max-w-md mx-auto">
             <div class="${t0 >= 771 ? 'score-negative' : 'score-positive'}">
@@ -344,6 +365,7 @@ function finishKonkanGame() {
 }
 
 // ==================== تركس ====================
+// (الكود الخاص بالتركس بقي كما هو مع تحسين الاحتفال)
 let t_players = [], t_teams = [], t_done = new Set(), t_log = [], t_startTime = null, t_current = null, t_kingdomStart = null;
 
 function fillTrixSelects() {
@@ -463,11 +485,16 @@ function finishTrixGame() {
     const s0 = t_teams[0].score;
     const s1 = t_teams[1].score;
     const isDraw = s0 === s1;
-    const winnerTeam = s0 > s1 ? t_teams[0] : t_teams[1];
+    const winnerIndex = s0 > s1 ? 0 : 1;
+    const winnerTeam = t_teams[winnerIndex];
 
     document.getElementById('t_winner').innerHTML = isDraw
         ? `<div class="text-6xl mb-4">🤝</div><div class="text-4xl font-black text-amber-300">تعادل!</div>`
-        : `<div class="inline-flex items-center gap-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 px-10 py-6 rounded-3xl text-5xl font-black shadow-2xl">👑 ${winnerTeam.name}</div>`;
+        : `<div class="text-6xl mb-6">🎉👏🏆</div>
+           <div class="text-4xl font-black text-amber-300">الفائز 🎉</div>
+           <div class="inline-flex items-center gap-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 px-10 py-6 rounded-3xl text-5xl font-black shadow-2xl">
+               ${winnerTeam.name}
+           </div>`;
 
     document.getElementById('t_finalScores').innerHTML = `
         <div class="grid grid-cols-2 gap-10 text-center max-w-md mx-auto">
@@ -488,14 +515,11 @@ function getFormattedDateTime() {
     const now = new Date();
     const dayName = now.toLocaleDateString('ar-EG', { weekday: 'long' });
     const date = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
-    
     let hours = now.getHours();
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12;
+    hours = hours % 12 || 12;
     const time = `${hours}:${minutes} ${ampm}`;
-
     return `${dayName} - ${date} - الساعة: ${time}`;
 }
 
@@ -504,7 +528,6 @@ async function exportKonkanImage() {
     const minutes = Math.floor(totalTime / 60);
     const seconds = totalTime % 60;
     const dateTimeStr = getFormattedDateTime();
-
     const t0 = k_teams[0].score;
     const t1 = k_teams[1].score;
     const winnerIsTeam0 = t0 < 771;
@@ -532,9 +555,13 @@ async function exportKonkanImage() {
                 </div>
             `).join('')}
         </div>
-        <div style="text-align:center; font-size:26px; line-height:1.4; margin:25px 0; padding:15px 0; border-top: 3px solid ${winnerIsTeam0 ? '#22c55e' : '#ef4444'};">
-            <div style="color: ${winnerIsTeam0 ? '#22c55e' : '#ef4444'}">${k_teams[0].name}: <strong>${k_teams[0].score}</strong></div>
-            <div style="color: ${!winnerIsTeam0 ? '#22c55e' : '#ef4444'}">${k_teams[1].name}: <strong>${k_teams[1].score}</strong></div>
+        <div style="text-align:center; font-size:26px; line-height:1.4; margin:25px 0; padding:20px 0; border-top: 4px solid ${winnerIsTeam0 ? '#22c55e' : '#ef4444'};">
+            <div style="color: ${winnerIsTeam0 ? '#22c55e' : '#ef4444'}; font-size:28px;">
+               ${winnerIsTeam0 ? '🏆 الفائز' : ''} ${k_teams[0].name}: <strong>${k_teams[0].score}</strong>
+            </div>
+            <div style="color: ${!winnerIsTeam0 ? '#22c55e' : '#ef4444'}; font-size:28px; margin-top:8px;">
+               ${!winnerIsTeam0 ? '🏆 الفائز' : ''} ${k_teams[1].name}: <strong>${k_teams[1].score}</strong>
+            </div>
         </div>
         <div style="text-center text-slate-400 text-sm">
             المدة الكلية: ${minutes}:${seconds < 10 ? '0' : ''}${seconds} دقيقة
@@ -555,7 +582,6 @@ async function exportTrixImage() {
     const minutes = Math.floor(totalTime / 60);
     const seconds = totalTime % 60;
     const dateTimeStr = getFormattedDateTime();
-
     const s0 = t_teams[0].score;
     const s1 = t_teams[1].score;
     const winnerIsTeam0 = s0 > s1;
@@ -582,9 +608,10 @@ async function exportTrixImage() {
                 </div>
             `).join('')}
         </div>
-        <div style="text-align:center; font-size:20px; padding:15px 0; border-top: 3px solid ${winnerIsTeam0 ? '#22c55e' : '#ef4444'};">
-            <div style="color: ${winnerIsTeam0 ? '#22c55e' : '#ef4444'}">${t_teams[0].name}: <strong>${t_teams[0].score}</strong></div>
-            <div style="color: ${!winnerIsTeam0 ? '#22c55e' : '#ef4444'}">${t_teams[1].name}: <strong>${t_teams[1].score}</strong></div>
+        <div style="text-align:center; font-size:22px; padding:20px 0; border-top: 4px solid ${winnerIsTeam0 ? '#22c55e' : '#ef4444'};">
+            <div style="color: ${winnerIsTeam0 ? '#22c55e' : '#ef4444'};">
+                🏆 الفائز: <strong>${winnerIsTeam0 ? t_teams[0].name : t_teams[1].name}</strong> (${winnerIsTeam0 ? s0 : s1})
+            </div>
         </div>
         <div style="text-center mt-8 text-slate-400 text-sm">
             الوقت الكلي: ${minutes}:${seconds < 10 ? '0' : ''}${seconds} دقيقة
