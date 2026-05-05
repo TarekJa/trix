@@ -494,13 +494,21 @@ function finishTrixGame() {
     const winnerIndex = s0 > s1 ? 0 : 1;
     const winnerTeam = t_teams[winnerIndex];
 
-    document.getElementById('t_winner').innerHTML = isDraw
-        ? `<div class="text-6xl mb-4">🤝</div><div class="text-4xl font-black text-amber-300">تعادل! دق و اخوه😉</div>`
-        : `<div class="text-6xl mb-6">👏😂</div>
-           <div class="text-4xl font-black text-amber-300">الفريق الفائز🏆</div>
-           <div class="inline-flex items-center gap-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 px-10 py-6 rounded-3xl text-5xl font-black shadow-2xl">
-               ${winnerTeam.name}
-           </div>`;
+    document.getElementById('t_winner').className =
+  "flex flex-col items-center gap-6 text-center";
+
+document.getElementById('t_winner').innerHTML = isDraw
+    ? `<div class="text-6xl">🤝</div>
+       <div class="text-4xl font-black text-amber-300 leading-relaxed">
+         تعادل! دق و اخوه😉
+       </div>`
+    : `<div class="text-6xl">👏😂</div>
+       <div class="text-4xl font-black text-amber-300 leading-relaxed">
+         الفريق الفائز🏆
+       </div>
+       <div class="inline-flex items-center gap-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 px-10 py-6 rounded-3xl text-5xl font-black shadow-2xl">
+         ${winnerTeam.name}
+       </div>`;
 
     document.getElementById('t_finalScores').innerHTML = `
         <div class="grid grid-cols-2 gap-10 text-center max-w-md mx-auto">
@@ -561,11 +569,11 @@ async function exportKonkanImage() {
                 </div>
             `).join('')}
         </div>
-        <div style="text-align:center; font-size:26px; line-height:1.4; margin:25px 0; padding:20px 0; border-top: 4px solid ${winnerIsTeam0 ? '#22c55e' : '#ef4444'};">
+        <div style="text-align:center; font-size:25px; line-height:1.4; margin:25px 0; padding:20px 0; border-top: 4px solid ${winnerIsTeam0 ? '#22c55e' : '#ef4444'};">
             <div style="color: ${winnerIsTeam0 ? '#22c55e' : '#ef4444'}; font-size:28px; text-shadow: 0 0 15px ${winnerIsTeam0 ? 'rgba(34,197,94,0.6)' : 'rgba(239,68,68,0.6)'};">
                ${winnerIsTeam0 ? '🏆 ' : ''}${k_teams[0].name}: <strong>${k_teams[0].score}</strong>
             </div>
-            <div style="color: ${!winnerIsTeam0 ? '#22c55e' : '#ef4444'}; font-size:28px; margin-top:12px; text-shadow: 0 0 15px ${!winnerIsTeam0 ? 'rgba(34,197,94,0.6)' : 'rgba(239,68,68,0.6)'};">
+            <div style="color: ${!winnerIsTeam0 ? '#22c55e' : '#ef4444'}; font-size:23px; margin-top:19px; text-shadow: 0 0 15px ${!winnerIsTeam0 ? 'rgba(34,197,94,0.6)' : 'rgba(239,68,68,0.6)'};">
                ${!winnerIsTeam0 ? '🏆 الفائز' : ''} ${k_teams[1].name}: <strong>${k_teams[1].score}</strong>
             </div>
         </div>
@@ -615,13 +623,13 @@ async function exportTrixImage() {
             `).join('')}
         </div>
 
-        <div style="text-align:center; font-size:26px; line-height:1.4; margin:25px 0; padding:25px 0; border-top: 4px solid ${s0 === 0 && s1 === 0 ? '#eab308' : (s0 > 0 ? '#22c55e' : '#ef4444')};">
+        <div style="text-align:center; font-size:23px; line-height:1.3; margin:23px 0; padding:23px 0; border-top: 4px solid ${s0 === 0 && s1 === 0 ? '#eab308' : (s0 > 0 ? '#22c55e' : '#ef4444')};">
 
-            <div style="color: ${s0 === 0 && s1 === 0 ? '#eab308' : (s0 > 0 ? '#22c55e' : '#ef4444')}; font-size:28px; text-shadow: 0 0 15px ${s0 === 0 && s1 === 0 ? 'rgba(234,179,8,0.7)' : (s0 > 0 ? 'rgba(34,197,94,0.7)' : 'rgba(239,68,68,0.7)')};">
+            <div style="color: ${s0 === 0 && s1 === 0 ? '#eab308' : (s0 > 0 ? '#22c55e' : '#ef4444')}; font-size:25px; text-shadow: 0 0 15px ${s0 === 0 && s1 === 0 ? 'rgba(234,179,8,0.7)' : (s0 > 0 ? 'rgba(34,197,94,0.7)' : 'rgba(239,68,68,0.7)')};">
                ${s0 === 0 && s1 === 0 ? '🤝 تعادل' : (s0 > 0 ? '🏆 الفائز' : '💀 الخاسر')}: <strong>${t_teams[0].name}</strong> (${s0})
             </div>
 
-            <div style="color: ${s0 === 0 && s1 === 0 ? '#eab308' : (s0 > 0 ? '#ef4444' : '#22c55e')}; font-size:28px; margin-top:35px; text-shadow: 0 0 15px ${s0 === 0 && s1 === 0 ? 'rgba(234,179,8,0.7)' : (s0 > 0 ? 'rgba(239,68,68,0.7)' : 'rgba(34,197,94,0.7)')};">
+            <div style="color: ${s0 === 0 && s1 === 0 ? '#eab308' : (s0 > 0 ? '#ef4444' : '#22c55e')}; font-size:25px; margin-top:30px; text-shadow: 0 0 15px ${s0 === 0 && s1 === 0 ? 'rgba(234,179,8,0.7)' : (s0 > 0 ? 'rgba(239,68,68,0.7)' : 'rgba(34,197,94,0.7)')};">
                ${s0 === 0 && s1 === 0 ? '🤝 تعادل' : (s0 > 0 ? '💀 الخاسر' : '🏆 الفائز')}: <strong>${t_teams[1].name}</strong> (${s1})
             </div>
 
