@@ -244,8 +244,27 @@
         <p>tarekjawish89@gmail.com</p>
     </div>
 </div>
-
 <script>
+// ==================== Google Sheet Configuration ====================
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxw7Nd5CdhzkPdxZU-gZ_HBuuSS5WoES1i02r6JkZMgRv93LxDNdFVauZw0ngHGSFw_/exec";
+
+async function sendToGoogleSheet(data) {
+    try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: { "Content-Type": "application/json" }
+        });
+        
+        if (response.ok) {
+            console.log("✅ تم الإرسال بنجاح إلى Google Sheet");
+        } else {
+            console.log("❌ فشل الإرسال - Status:", response.status);
+        }
+    } catch (error) {
+        console.error("❌ خطأ في الاتصال:", error);
+    }
+}
 // ==================== متغيرات ====================
 let k_players = [], k_teams = [], k_roundNumber = 0, k_log = [], k_startTime = null;
 let t_players = [], t_teams = [], t_done = new Set(), t_log = [], t_startTime = null, t_current = null, t_kingdomStart = null;
@@ -613,9 +632,27 @@ async function exportKonkanImage() {
     const minutes = Math.floor(totalTime / 60);
     const seconds = totalTime % 60;
     const dateTimeStr = getFormattedDateTime();
+
+    // إرسال البيانات إلى Google Sheet
+    const sheetData = {
+        gameType: "كونكان 71",
+        players: k_players,
+        teamAName: k_teams[0].name,
+        teamBName: k_teams[1].name,
+        scoreA: k_teams[0].score,
+        scoreB: k_teams[1].score,
+        winner: k_teams[0].score < 771 ? k_teams[0].name : k_teams[1].name,
+        duration: `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`,
+        details: { rounds: k_log, dateTime: dateTimeStr }
+    };
+
+    await sendToGoogleSheet(sheetData);   // ← مهم جداً
+
+    // ==================== توليد الصورة ====================
     const t0 = k_teams[0].score;
     const t1 = k_teams[1].score;
     const winnerIsTeam0 = t0 < 771;
+    
     let box = document.createElement("div");
     box.style.cssText = `padding: 30px; background: linear-gradient(135deg, #0f172a, #1e2937); color: white; width: 460px; font-family: Cairo, sans-serif; border-radius: 24px; box-shadow: 0 0 50px rgba(245, 158, 11, 0.4);`;
    
@@ -665,9 +702,30 @@ async function exportTrixImage() {
     const minutes = Math.floor(totalTime / 60);
     const seconds = totalTime % 60;
     const dateTimeStr = getFormattedDateTime();
+
+    // إرسال البيانات إلى Google Sheet
+    const sheetData = {
+        gameType: "تركس",
+        players: t_players,
+        teamAName: t_teams[0].name,
+        teamBName: t_teams[1].name,
+        scoreA: t_teams[0].score,
+        scoreB: t_teams[1].score,
+        winner: t_teams[0].score > t_teams[1].score ? t_teams[0].name : t_teams[1].name,
+        duration: `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`,
+        details: { 
+            kingdoms: t_log, 
+            dateTime: dateTimeStr 
+        }
+    };
+
+    await sendToGoogleSheet(sheetData);
+
+    // توليد الصورة
     const s0 = t_teams[0].score;
     const s1 = t_teams[1].score;
     const winnerIsTeam0 = s0 > s1;
+    
     let box = document.createElement("div");
     box.style.cssText = `padding: 30px; background: linear-gradient(135deg, #0f172a, #1e2937); color: white; width: 460px; font-family: Cairo, sans-serif; border-radius: 24px; box-shadow: 0 0 50px rgba(245, 158, 11, 0.4);`;
    
