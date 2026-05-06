@@ -250,19 +250,15 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxw7Nd5CdhzkP
 
 async function sendToGoogleSheet(data) {
     try {
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
+        await fetch(GOOGLE_SCRIPT_URL, {
             method: "POST",
             body: JSON.stringify(data),
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json" },
+            mode: "no-cors"        // ← هذا الحل المؤقت
         });
-        
-        if (response.ok) {
-            console.log("✅ تم الإرسال بنجاح إلى Google Sheet");
-        } else {
-            console.log("❌ فشل الإرسال - Status:", response.status);
-        }
+        console.log("✅ تم إرسال البيانات (no-cors mode)");
     } catch (error) {
-        console.error("❌ خطأ في الاتصال:", error);
+        console.error("❌ خطأ في الإرسال:", error);
     }
 }
 // ==================== متغيرات ====================
