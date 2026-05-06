@@ -77,23 +77,42 @@
 
     <!-- زر الرجوع -->
     <button id="backBtn" onclick="goBack()" 
-            class="hidden fixed top-6 left-6 bg-slate-800 hover:bg-slate-700 px-6 py-3 rounded-2xl text-sm flex items-center gap-2 shadow-lg z-50">
-        ← رجوع
-    </button>
+    class="hidden fixed bottom-4 left-4 md:bottom-6 md:left-6 
+           bg-slate-800 hover:bg-slate-700 
+           px-4 md:px-6 py-2 md:py-3 
+           rounded-2xl text-xs md:text-sm 
+           flex items-center gap-2 
+           shadow-lg z-50">
+    ← رجوع
+</button>
 
     <!-- اختيار اللعبة -->
     <div id="gameSelector" class="text-center mb-10">
-        <h1 class="text-4xl font-black text-amber-300 mb-3">🎮 اختر اللعبة</h1>
-        <p class="text-2xl text-emerald-400 font-medium">تسجيل و توثيق 😉 📝</p>
-        <div class="grid grid-cols-2 gap-6 mt-10">
-            <button onclick="selectGame('konkan')" class="bg-gradient-to-br from-amber-500 to-orange-600 p-10 rounded-3xl text-2xl font-bold hover:scale-105 transition-all shadow-xl">
-                🃏كونكان 71🃏
-            </button>
-            <button onclick="selectGame('trix')" class="bg-gradient-to-br from-indigo-600 to-purple-600 p-10 rounded-3xl text-2xl font-bold hover:scale-105 transition-all shadow-xl">
-                ♥️♠️تركس♦️♣️
-            </button>
-        </div>
+    <h1 class="text-4xl font-black text-amber-300 mb-3">🎮 اختر اللعبة</h1>
+    <p class="text-2xl text-emerald-400 font-medium">تسجيل و توثيق 😉 📝</p>
+
+    <div class="grid grid-cols-2 gap-6 mt-10">
+        
+        <button onclick="selectGame('konkan')" 
+            class="bg-gradient-to-br from-amber-500 to-orange-600 
+                   p-5 md:p-10 
+                   rounded-3xl text-lg md:text-2xl font-bold 
+                   hover:scale-105 active:scale-95 
+                   transition-all shadow-xl">
+            🃏كونكان 71🃏
+        </button>
+
+        <button onclick="selectGame('trix')" 
+            class="bg-gradient-to-br from-indigo-600 to-purple-600 
+                   p-5 md:p-10 
+                   rounded-3xl text-lg md:text-2xl font-bold 
+                   hover:scale-105 active:scale-95 
+                   transition-all shadow-xl">
+            ♥️♠️تركس♦️♣️
+        </button>
+
     </div>
+</div>
 
     <!-- ==================== كونكان 71 ==================== -->
     <div id="konkanApp" class="hidden">
