@@ -76,7 +76,7 @@
 </head>
 <body class="text-white min-h-screen pb-12">
 <div class="max-w-2xl mx-auto p-4 sm:p-6 md:p-8">
-   <!-- زر الرجوع المحسن -->
+
 <button id="backBtn" onclick="goBack()"
     class="hidden fixed bottom-6 left-6 md:bottom-8 md:left-8
            group bg-gradient-to-br from-amber-500 to-orange-600 
@@ -281,26 +281,92 @@ function saveToLocalStorage() {
     };
     localStorage.setItem('cardGameState', JSON.stringify(state));
 }
+// حفظ مرحلة الإعداد (أسماء اللاعبين)
+function saveSetup() {
+    const setupData = {
+        currentGame: document.getElementById('konkanApp').classList.contains('hidden') ? 
+                     (document.getElementById('trixApp').classList.contains('hidden') ? null : 'trix') : 'konkan',
+        
+        k_p0: document.getElementById('k_p0')?.value || '',
+        k_p1: document.getElementById('k_p1')?.value || '',
+        k_p2: document.getElementById('k_p2')?.value || '',
+        k_p3: document.getElementById('k_p3')?.value || '',
+        
+        t_p0: document.getElementById('t_p0')?.value || '',
+        t_p1: document.getElementById('t_p1')?.value || '',
+        t_p2: document.getElementById('t_p2')?.value || '',
+        t_p3: document.getElementById('t_p3')?.value || ''
+    };
+    
+    localStorage.setItem('cardGameSetup', JSON.stringify(setupData));
+}
+function loadSetup() {
+    const saved = localStorage.getItem('cardGameSetup');
+    if (!saved) return;
+
+    const data = JSON.parse(saved);
+
+    // تحميل أسماء كونكان
+    if (document.getElementById('k_p0')) {
+        document.getElementById('k_p0').value = data.k_p0 || '';
+        document.getElementById('k_p1').value = data.k_p1 || '';
+        document.getElementById('k_p2').value = data.k_p2 || '';
+        document.getElementById('k_p3').value = data.k_p3 || '';
+    }
+
+    // تحميل أسماء تركس
+    if (document.getElementById('t_p0')) {
+        document.getElementById('t_p0').value = data.t_p0 || '';
+        document.getElementById('t_p1').value = data.t_p1 || '';
+        document.getElementById('t_p2').value = data.t_p2 || '';
+        document.getElementById('t_p3').value = data.t_p3 || '';
+    }
+}
 
 function loadFromLocalStorage() {
     const saved = localStorage.getItem('cardGameState');
     if (!saved) return false;
+
     const state = JSON.parse(saved);
    
     if (state.currentGame === 'konkan') {
         selectGame('konkan');
-        Object.assign(window, {k_players: state.k_players, k_teams: state.k_teams, k_roundNumber: state.k_roundNumber, k_log: state.k_log, k_startTime: state.k_startTime});
+        
+        k_players = state.k_players || [];
+        k_teams = state.k_teams || [];
+        k_roundNumber = state.k_roundNumber || 0;
+        k_log = state.k_log || [];
+        k_startTime = state.k_startTime || Date.now();
+
         document.getElementById('k_setup').classList.add('hidden');
         document.getElementById('k_game').classList.remove('hidden');
+        
         renderKonkanScores();
         renderKonkanLog();
+        
+        // إذا كانت اللعبة منتهية
+        if (k_teams[0].score >= 771 || k_teams[1].score >= 771) {
+            finishKonkanGame();
+        }
+        
     } else if (state.currentGame === 'trix') {
         selectGame('trix');
-        Object.assign(window, {t_players: state.t_players, t_teams: state.t_teams, t_done: new Set(state.t_done), t_log: state.t_log, t_startTime: state.t_startTime});
+        
+        t_players = state.t_players || [];
+        t_teams = state.t_teams || [];
+        t_done = new Set(state.t_done || []);
+        t_log = state.t_log || [];
+        t_startTime = state.t_startTime || Date.now();
+
         document.getElementById('t_setup').classList.add('hidden');
         document.getElementById('t_game').classList.remove('hidden');
+        
         renderKingdoms();
         renderTrixScores();
+        
+        if (t_done.size === 4) {
+            finishTrixGame();
+        }
     }
     return true;
 }
@@ -777,10 +843,18 @@ async function exportTrixImage() {
 
 // ==================== تهيئة ====================
 window.onload = () => {
+    loadSetup();                    // ← جديد
     if (!loadFromLocalStorage()) {
         document.getElementById('gameSelector').classList.remove('hidden');
     }
 };
+// حفظ تلقائي عند كتابة أي اسم
+document.addEventListener('input', function(e) {
+    const id = e.target.id;
+    if (id.startsWith('k_p') || id.startsWith('t_p')) {
+        saveSetup();
+    }
+});
 </script>
 </body>
 </html>
