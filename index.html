@@ -7,15 +7,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-<!-- PWA / FAVICON SETUP -->
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" href="favicon.ico">
-<link rel="manifest" href="site.webmanifest">
-<meta name="msapplication-TileColor" content="#000000">
-<meta name="msapplication-TileImage" content="mstile-150x150.png">
-<meta name="theme-color" content="#000000">
+    
+    <!-- PWA / FAVICON SETUP -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" href="favicon.ico">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="msapplication-TileColor" content="#000000">
+    <meta name="msapplication-TileImage" content="mstile-150x150.png">
+    <meta name="theme-color" content="#000000">
+
     <style>
         body {
             font-family: 'Cairo', sans-serif;
@@ -74,14 +76,13 @@
 </head>
 <body class="text-white min-h-screen pb-12">
 <div class="max-w-2xl mx-auto p-4 sm:p-6 md:p-8">
-
     <!-- زر الرجوع -->
-    <button id="backBtn" onclick="goBack()" 
-    class="hidden fixed bottom-4 left-4 md:bottom-6 md:left-6 
-           bg-slate-800 hover:bg-slate-700 
-           px-4 md:px-6 py-2 md:py-3 
-           rounded-2xl text-xs md:text-sm 
-           flex items-center gap-2 
+    <button id="backBtn" onclick="goBack()"
+    class="hidden fixed bottom-4 left-4 md:bottom-6 md:left-6
+           bg-slate-800 hover:bg-slate-700
+           px-4 md:px-6 py-2 md:py-3
+           rounded-2xl text-xs md:text-sm
+           flex items-center gap-2
            shadow-lg z-50">
     ← رجوع
 </button>
@@ -90,27 +91,23 @@
     <div id="gameSelector" class="text-center mb-10">
     <h1 class="text-4xl font-black text-amber-300 mb-3">🎮 اختر اللعبة</h1>
     <p class="text-2xl text-emerald-400 font-medium">تسجيل و توثيق 😉 📝</p>
-
     <div class="grid grid-cols-2 gap-6 mt-10">
-        
-        <button onclick="selectGame('konkan')" 
-            class="bg-gradient-to-br from-amber-500 to-orange-600 
-                   p-5 md:p-10 
-                   rounded-3xl text-lg md:text-2xl font-bold 
-                   hover:scale-105 active:scale-95 
+        <button onclick="selectGame('konkan')"
+            class="bg-gradient-to-br from-amber-500 to-orange-600
+                   p-5 md:p-10
+                   rounded-3xl text-lg md:text-2xl font-bold
+                   hover:scale-105 active:scale-95
                    transition-all shadow-xl">
             🃏كونكان 71🃏
         </button>
-
-        <button onclick="selectGame('trix')" 
-            class="bg-gradient-to-br from-indigo-600 to-purple-600 
-                   p-5 md:p-10 
-                   rounded-3xl text-lg md:text-2xl font-bold 
-                   hover:scale-105 active:scale-95 
+        <button onclick="selectGame('trix')"
+            class="bg-gradient-to-br from-indigo-600 to-purple-600
+                   p-5 md:p-10
+                   rounded-3xl text-lg md:text-2xl font-bold
+                   hover:scale-105 active:scale-95
                    transition-all shadow-xl">
             ♥️♠️تركس♦️♣️
         </button>
-
     </div>
 </div>
 
@@ -135,7 +132,7 @@
         </div>
         <div id="k_game" class="hidden">
             <div id="k_scores" class="mt-6 bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl"></div>
-          
+         
             <div class="mt-8 bg-slate-900/90 backdrop-blur-2xl p-8 rounded-3xl border border-amber-500/30">
                 <h3 class="text-2xl font-bold text-amber-300 mb-6 text-center">تسجيل جولة جديدة</h3>
                 <div class="grid grid-cols-2 gap-6">
@@ -157,7 +154,7 @@
         <div id="k_final" class="hidden text-center">
             <div id="k_winner" class="mt-12 mb-10"></div>
             <div id="k_finalScores" class="mb-10"></div>
-            
+           
             <button onclick="exportKonkanImage()" class="btn w-full py-6 text-2xl font-bold rounded-3xl shadow-2xl mb-4">
                 📸 توثيق النتيجة
             </button>
@@ -228,7 +225,7 @@
         <div id="t_final" class="hidden text-center">
             <div id="t_winner" class="mt-12 mb-10"></div>
             <div id="t_finalScores" class="mb-10"></div>
-            
+           
             <button onclick="exportTrixImage()" class="btn w-full py-6 text-2xl font-bold rounded-3xl shadow-2xl mb-4">
                 📸 توثيق النتيجة
             </button>
@@ -244,6 +241,7 @@
         <p>tarekjawish89@gmail.com</p>
     </div>
 </div>
+
 <script>
 // ==================== Google Sheet Configuration ====================
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxw7Nd5CdhzkPdxZU-gZ_HBuuSS5WoES1i02r6JkZMgRv93LxDNdFVauZw0ngHGSFw_/exec";
@@ -254,13 +252,14 @@ async function sendToGoogleSheet(data) {
             method: "POST",
             body: JSON.stringify(data),
             headers: { "Content-Type": "application/json" },
-            mode: "no-cors"        // ← هذا الحل المؤقت
+            mode: "no-cors"
         });
-        console.log("✅ تم إرسال البيانات (no-cors mode)");
+        console.log("✅ تم إرسال البيانات");
     } catch (error) {
         console.error("❌ خطأ في الإرسال:", error);
     }
 }
+
 // ==================== متغيرات ====================
 let k_players = [], k_teams = [], k_roundNumber = 0, k_log = [], k_startTime = null;
 let t_players = [], t_teams = [], t_done = new Set(), t_log = [], t_startTime = null, t_current = null, t_kingdomStart = null;
@@ -268,7 +267,7 @@ let t_players = [], t_teams = [], t_done = new Set(), t_log = [], t_startTime = 
 // ==================== Local Storage ====================
 function saveToLocalStorage() {
     const state = {
-        currentGame: document.getElementById('konkanApp').classList.contains('hidden') ? 
+        currentGame: document.getElementById('konkanApp').classList.contains('hidden') ?
                      (document.getElementById('trixApp').classList.contains('hidden') ? null : 'trix') : 'konkan',
         k_players, k_teams, k_roundNumber, k_log, k_startTime,
         t_players, t_teams, t_done: Array.from(t_done), t_log, t_startTime
@@ -280,7 +279,7 @@ function loadFromLocalStorage() {
     const saved = localStorage.getItem('cardGameState');
     if (!saved) return false;
     const state = JSON.parse(saved);
-    
+   
     if (state.currentGame === 'konkan') {
         selectGame('konkan');
         Object.assign(window, {k_players: state.k_players, k_teams: state.k_teams, k_roundNumber: state.k_roundNumber, k_log: state.k_log, k_startTime: state.k_startTime});
@@ -376,36 +375,40 @@ function getRemaining(score) {
     return `باقي ${rem} لتطيرو 🥲😁<br>`;
 }
 
-document.addEventListener('input', function(e) {
-    if (e.target.id === 'k_teamA') {
-        const b = document.getElementById('k_teamB');
-        if (e.target.value !== '') b.value = '';
-    }
-    if (e.target.id === 'k_teamB') {
-        const a = document.getElementById('k_teamA');
-        if (e.target.value !== '') a.value = '';
-    }
-});
-
 function saveKonkanRound() {
     let scoreA = parseInt(document.getElementById('k_teamA').value) || 0;
     let scoreB = parseInt(document.getElementById('k_teamB').value) || 0;
     if (scoreA > 0 && scoreB > 0) scoreB = 0;
     if (scoreA === 0 && scoreB === 0) return alert("⚠️ أدخل نقاط لفريق واحد على الأقل");
+
     k_roundNumber++;
+
+    const now = Date.now();
+    let roundDuration = 0;
+    if (k_log.length > 0) {
+        roundDuration = Math.floor((now - k_startTime - k_log[k_log.length-1].cumulativeTime * 1000) / 1000);
+    } else {
+        roundDuration = Math.floor((now - k_startTime) / 1000);
+    }
+
     k_teams[0].score += scoreA;
     k_teams[1].score += scoreB;
+
     k_log.push({
         round: k_roundNumber,
         teamA: scoreA,
         teamB: scoreB,
-        time: Math.floor((Date.now() - k_startTime) / 1000)
+        duration: roundDuration,           // وقت الجولة فقط
+        cumulativeTime: Math.floor((now - k_startTime) / 1000)
     });
+
     document.getElementById('k_teamA').value = '';
     document.getElementById('k_teamB').value = '';
+
     renderKonkanScores();
     renderKonkanLog();
     saveToLocalStorage();
+
     if (k_teams[0].score >= 771 || k_teams[1].score >= 771) finishKonkanGame();
 }
 
@@ -421,7 +424,7 @@ function renderKonkanLog() {
                     <span class="text-slate-500">-</span>
                     <span class="${!aHigher && r.teamB > 0 ? 'text-red-500' : 'text-sky-400'}">${r.teamB}</span>
                 </div>
-                <div class="text-slate-400 text-sm">${r.time} ث</div>
+                <div class="text-emerald-400 text-sm font-medium">${r.duration} ث</div>
             </div>
         `;
     }).join('');
@@ -451,7 +454,7 @@ function finishKonkanGame() {
             ${winnerTeam.name}
         </div>
      </div>`;
-   
+  
     document.getElementById('k_finalScores').innerHTML = `
         <div class="grid grid-cols-2 gap-10 text-center max-w-md mx-auto">
             <div class="${t0 >= 771 ? 'score-negative' : 'score-positive'}">
@@ -501,13 +504,14 @@ function renderKingdoms() {
     for(let i = 0; i < 4; i++) {
         const div = document.createElement('div');
         div.className = `card bg-slate-800/90 p-6 rounded-3xl text-center cursor-pointer border border-slate-700 hover:border-amber-400`;
+        const isDone = t_done.has(i);
         div.innerHTML = `
             <div class="text-4xl mb-3">🏰</div>
             <div class="font-bold text-xl">مملكة ${i+1}</div>
             <div class="text-amber-300 mt-1">${t_players[i]}</div>
-            ${t_done.has(i) ? '<div class="text-green-400 mt-2">✅ مكتملة</div>' : ''}
+            ${isDone ? '<div class="text-green-400 mt-2">✅ مكتملة</div>' : ''}
         `;
-        if(!t_done.has(i)) div.onclick = () => openTrixKingdom(i);
+        if(!isDone) div.onclick = () => openTrixKingdom(i);
         container.appendChild(div);
     }
 }
@@ -550,27 +554,33 @@ function saveTrixKingdom() {
     const k = +document.getElementById('t_king').value;
     const d = +document.getElementById('t_dinar').value;
     const l = +document.getElementById('t_lutoosh').value;
+
     const A = t - g*25 - k*75 - d*10 - l*15;
     const B = (500 - t) - (4 - g)*25 - (1 - k)*75 - (13 - d)*10 - (13 - l)*15;
+
     const teamA = t_current % 2 === 0 ? 0 : 1;
     t_teams[teamA].score += A;
     t_teams[1 - teamA].score += B;
+
     const duration = Math.floor((Date.now() - t_kingdomStart) / 1000);
+
     t_log.push({
         kingdom: t_current + 1,
         player: t_players[t_current],
-        time: duration,
+        duration: duration,           // وقت المملكة فقط
         trix: t,
         girls: g,
         king: k,
         dinar: d,
         lutoosh: l
     });
+
     t_done.add(t_current);
     document.getElementById('t_panel').classList.add('hidden');
     renderKingdoms();
     renderTrixScores();
     saveToLocalStorage();
+
     if(t_done.size === 4) finishTrixGame();
 }
 
@@ -582,9 +592,8 @@ function finishTrixGame() {
     const isDraw = s0 === s1;
     const winnerIndex = s0 > s1 ? 0 : 1;
     const winnerTeam = t_teams[winnerIndex];
-    document.getElementById('t_winner').className =
-  "flex flex-col items-center gap-6 text-center";
-document.getElementById('t_winner').innerHTML = isDraw
+    document.getElementById('t_winner').className = "flex flex-col items-center gap-6 text-center";
+    document.getElementById('t_winner').innerHTML = isDraw
     ? `<div class="text-6xl">🤝</div>
        <div class="text-4xl font-black text-amber-300 leading-relaxed whitespace-nowrap">
          تعادل! دق و اخوه😉
@@ -596,6 +605,7 @@ document.getElementById('t_winner').innerHTML = isDraw
        <div class="inline-flex items-center gap-4 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-900 px-10 py-6 rounded-3xl text-5xl font-black shadow-2xl">
          ${winnerTeam.name}
        </div>`;
+
     document.getElementById('t_finalScores').innerHTML = `
         <div class="grid grid-cols-2 gap-10 text-center max-w-md mx-auto">
             <div class="${s0 >= 0 ? 'score-positive' : 'score-negative'}">
@@ -629,7 +639,6 @@ async function exportKonkanImage() {
     const seconds = totalTime % 60;
     const dateTimeStr = getFormattedDateTime();
 
-    // إرسال البيانات إلى Google Sheet
     const sheetData = {
         gameType: "كونكان 71",
         players: k_players,
@@ -641,17 +650,15 @@ async function exportKonkanImage() {
         duration: `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`,
         details: { rounds: k_log, dateTime: dateTimeStr }
     };
+    await sendToGoogleSheet(sheetData);
 
-    await sendToGoogleSheet(sheetData);   // ← مهم جداً
-
-    // ==================== توليد الصورة ====================
     const t0 = k_teams[0].score;
     const t1 = k_teams[1].score;
     const winnerIsTeam0 = t0 < 771;
-    
+
     let box = document.createElement("div");
     box.style.cssText = `padding: 30px; background: linear-gradient(135deg, #0f172a, #1e2937); color: white; width: 460px; font-family: Cairo, sans-serif; border-radius: 24px; box-shadow: 0 0 50px rgba(245, 158, 11, 0.4);`;
-   
+  
     box.innerHTML = `
         <div style="text-align:center; margin-bottom:25px">
             <div style="font-size:48px; margin-bottom:10px">♠️♥️🃏♦️♣️</div>
@@ -668,7 +675,7 @@ async function exportKonkanImage() {
                         <span style="color:#64748b">-</span>
                         <span style="color:#34d399">${r.teamB}</span>
                     </div>
-                    <div style="color:#94a3b8">${r.time}ث</div>
+                    <div style="color:#4ade80; font-weight:600;">${r.duration} ث</div>
                 </div>
             `).join('')}
         </div>
@@ -680,10 +687,11 @@ async function exportKonkanImage() {
                ${!winnerIsTeam0 ? '🏆 الفائز' : ''} ${k_teams[1].name}: <strong>${k_teams[1].score}</strong>
             </div>
         </div>
-        <div style="text-center text-slate-400 text-sm">
-            المدة الكلية: ${minutes}:${seconds < 10 ? '0' : ''}${seconds} دقيقة
+        <div style="text-center text-emerald-400 text-base font-medium mt-6">
+            ⏱ المدة الكلية: ${minutes}:${seconds < 10 ? '0' : ''}${seconds} دقيقة
         </div>
     `;
+
     document.body.appendChild(box);
     const canvas = await html2canvas(box, { scale: 3, backgroundColor: "#0f172a" });
     const link = document.createElement("a");
@@ -699,7 +707,6 @@ async function exportTrixImage() {
     const seconds = totalTime % 60;
     const dateTimeStr = getFormattedDateTime();
 
-    // إرسال البيانات إلى Google Sheet
     const sheetData = {
         gameType: "تركس",
         players: t_players,
@@ -709,22 +716,17 @@ async function exportTrixImage() {
         scoreB: t_teams[1].score,
         winner: t_teams[0].score > t_teams[1].score ? t_teams[0].name : t_teams[1].name,
         duration: `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`,
-        details: { 
-            kingdoms: t_log, 
-            dateTime: dateTimeStr 
-        }
+        details: { kingdoms: t_log, dateTime: dateTimeStr }
     };
-
     await sendToGoogleSheet(sheetData);
 
-    // توليد الصورة
     const s0 = t_teams[0].score;
     const s1 = t_teams[1].score;
     const winnerIsTeam0 = s0 > s1;
-    
+
     let box = document.createElement("div");
     box.style.cssText = `padding: 30px; background: linear-gradient(135deg, #0f172a, #1e2937); color: white; width: 460px; font-family: Cairo, sans-serif; border-radius: 24px; box-shadow: 0 0 50px rgba(245, 158, 11, 0.4);`;
-   
+  
     box.innerHTML = `
         <div style="text-align:center; margin-bottom:25px">
             <div style="font-size:48px; margin-bottom:10px">♠️♥️🃏♦️♣️</div>
@@ -737,7 +739,7 @@ async function exportTrixImage() {
                 <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #334155;">
                     <div><strong>🏰 مملكة ${x.kingdom}</strong><br><span style="color:#cbd5e1">${x.player}</span></div>
                     <div style="text-align:right; color:#94a3b8">
-                        ⏱ ${x.time} ث<br>
+                        ⏱ ${x.duration} ث<br>
                         ♥️♠️♦️♣️ ${x.trix} | 👸🏼 ${x.girls} | 👑♥️ ${x.king}<br>
                         ♦️ ${x.dinar} | 🃏 ${x.lutoosh}
                     </div>
@@ -752,10 +754,11 @@ async function exportTrixImage() {
                ${s0 === 0 && s1 === 0 ? '🤝 تعادل' : (s0 > 0 ? '💀 الخاسر' : '🏆 الفائز')}: <strong>${t_teams[1].name}</strong> (${s1})
             </div>
         </div>
-        <div style="text-center text-slate-400 text-sm">
-            الوقت الكلي: ${minutes}:${seconds < 10 ? '0' : ''}${seconds} دقيقة
+        <div style="text-center text-emerald-400 text-base font-medium mt-6">
+            ⏱ المدة الكلية: ${minutes}:${seconds < 10 ? '0' : ''}${seconds} دقيقة
         </div>
     `;
+
     document.body.appendChild(box);
     const canvas = await html2canvas(box, { scale: 3, backgroundColor: "#0f172a" });
     const link = document.createElement("a");
