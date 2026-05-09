@@ -79,19 +79,19 @@
    <!-- زر الرجوع المحسن -->
 <button id="backBtn" onclick="goBack()"
     class="hidden fixed bottom-6 left-6 md:bottom-8 md:left-8
-           bg-gradient-to-r from-slate-800 to-slate-700 
-           hover:from-slate-700 hover:to-slate-600
+           group bg-gradient-to-br from-amber-500 to-orange-600 
+           hover:from-amber-600 hover:to-orange-700
            active:scale-95
-           px-5 md:px-7 py-3 md:py-4
-           rounded-3xl text-sm md:text-base font-medium
+           px-6 md:px-8 py-3.5 md:py-4
+           rounded-3xl text-base font-semibold
            flex items-center gap-3
-           shadow-xl shadow-black/50
-           border border-slate-600/50
-           backdrop-blur-md
+           shadow-2xl shadow-orange-500/30
            transition-all duration-300 z-50">
     
-    <span class="text-xl transition-transform duration-300 group-hover:-translate-x-1">←</span>
-    <span>رجوع</span>
+    <div class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-2xl backdrop-blur-sm transition-all group-active:rotate-12">
+        ←
+    </div>
+    <span>رجوع للقائمة</span>
 </button>
 
     <!-- اختيار اللعبة -->
